@@ -9,7 +9,7 @@ class SafePathWebSocket {
 
         this.backendUrl =
             options.backendUrl ??
-            'http://localhost:3000';
+            window.location.origin;
 
         /*
          * Vehicle ID is optional.

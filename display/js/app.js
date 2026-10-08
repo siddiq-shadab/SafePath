@@ -13,7 +13,7 @@
 const SAFEPATH_CONFIG = {
 
     backendUrl:
-        'http://localhost:3000',
+        window.location.origin,
 
     defaultLatitude:
         18.445167,
