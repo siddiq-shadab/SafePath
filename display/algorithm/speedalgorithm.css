@@ -1,0 +1,404 @@
+/*
+ * SafePath
+ * Speed Analysis Algorithm
+ *
+ * File:
+ * D:\Sec\safe_path_nodejs\display\algorithm\speedalgorithm.css
+ *
+ * Purpose:
+ * Styling for the Car speed violation popup.
+ */
+
+/* ================================================================
+   Main Popup
+   ================================================================ */
+
+.safepath-speed-popup {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    width: min(
+        92vw,
+        470px
+    );
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.94);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    z-index: 11000;
+
+    pointer-events: none;
+
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease,
+        visibility 180ms ease;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+/* ================================================================
+   Visible Popup
+   ================================================================ */
+
+.safepath-speed-popup--visible {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1);
+
+    pointer-events: auto;
+}
+
+/* ================================================================
+   Popup Card
+   ================================================================ */
+
+.safepath-speed-popup__card {
+    position: relative;
+
+    padding: 24px;
+
+    background: #ffffff;
+
+    border: 3px solid #d97706;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 14px 45px
+        rgba(0, 0, 0, 0.30);
+}
+
+/* ================================================================
+   Header
+   ================================================================ */
+
+.safepath-speed-popup__header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+/* ================================================================
+   Warning Icon
+   ================================================================ */
+
+.safepath-speed-popup__warning-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    border-radius: 50%;
+
+    background: #d97706;
+
+    color: #ffffff;
+
+    font-size: 27px;
+
+    font-weight: 800;
+}
+
+/* ================================================================
+   Title
+   ================================================================ */
+
+.safepath-speed-popup__title {
+    color: #9a4d00;
+
+    font-size: 23px;
+
+    font-weight: 800;
+
+    line-height: 1.2;
+}
+
+/* ================================================================
+   Message
+   ================================================================ */
+
+.safepath-speed-popup__message {
+    padding: 14px 16px;
+
+    margin-bottom: 16px;
+
+    background: #fff7ed;
+
+    border-left: 4px solid #d97706;
+
+    border-radius: 8px;
+
+    color: #333333;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    line-height: 1.5;
+}
+
+/* ================================================================
+   Vehicle Information
+   ================================================================ */
+
+.safepath-speed-popup__vehicle {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    padding: 10px 0;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+.safepath-speed-popup__vehicle-label {
+    color: #666666;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.safepath-speed-popup__vehicle-id {
+    color: #111111;
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+/* ================================================================
+   Speed
+   ================================================================ */
+
+.safepath-speed-popup__speed {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px 0;
+
+    color: #555555;
+
+    font-size: 14px;
+}
+
+.safepath-speed-popup__speed strong {
+    color: #c2410c;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+/* ================================================================
+   Countdown Container
+   ================================================================ */
+
+.safepath-speed-popup__countdown-container {
+    margin-top: 8px;
+
+    padding: 16px;
+
+    text-align: center;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 12px;
+}
+
+/* ================================================================
+   Countdown Label
+   ================================================================ */
+
+.safepath-speed-popup__countdown-label {
+    color: #555555;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+/* ================================================================
+   Countdown Number
+   ================================================================ */
+
+.safepath-speed-popup__countdown {
+    margin-top: 4px;
+
+    color: #b91c1c;
+
+    font-size: 58px;
+
+    font-weight: 900;
+
+    line-height: 1.05;
+}
+
+/* ================================================================
+   Countdown Unit
+   ================================================================ */
+
+.safepath-speed-popup__countdown-unit {
+    color: #777777;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+/* ================================================================
+   Fine
+   ================================================================ */
+
+.safepath-speed-popup__fine {
+    margin-top: 14px;
+
+    padding: 12px;
+
+    text-align: center;
+
+    background: #f1f5f9;
+
+    border-radius: 8px;
+
+    color: #555555;
+
+    font-size: 16px;
+
+    font-weight: 800;
+}
+
+/* ================================================================
+   Fine Issued
+   ================================================================ */
+
+.safepath-speed-popup--fine-issued
+.safepath-speed-popup__fine {
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+/* ================================================================
+   Close Button
+   ================================================================ */
+
+.safepath-speed-popup__close {
+    width: 100%;
+
+    margin-top: 16px;
+
+    padding: 12px 18px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: #111827;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 150ms ease,
+        transform 100ms ease;
+}
+
+.safepath-speed-popup__close:hover {
+    background: #000000;
+}
+
+.safepath-speed-popup__close:active {
+    transform: scale(0.98);
+}
+
+.safepath-speed-popup__close:focus-visible {
+    outline: 3px solid #93c5fd;
+
+    outline-offset: 2px;
+}
+
+/* ================================================================
+   Mobile
+   ================================================================ */
+
+@media (max-width: 600px) {
+
+    .safepath-speed-popup {
+        width: calc(100vw - 24px);
+    }
+
+    .safepath-speed-popup__card {
+        padding: 18px;
+    }
+
+    .safepath-speed-popup__title {
+        font-size: 19px;
+    }
+
+    .safepath-speed-popup__message {
+        font-size: 14px;
+    }
+
+    .safepath-speed-popup__countdown {
+        font-size: 48px;
+    }
+
+    .safepath-speed-popup__speed strong {
+        font-size: 18px;
+    }
+}
+
+/* ================================================================
+   Reduced Motion
+   ================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .safepath-speed-popup {
+        transition: none;
+    }
+
+}

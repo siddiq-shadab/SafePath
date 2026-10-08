@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>SafePath - Overview</title>
+
+  <link
+    rel="stylesheet"
+    href="../css/Overview.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+</head>
+
+<body>
+
+  <div
+    id="navigationOverlay"
+    class="navigation-overlay"
+  ></div>
+
+
+  <aside
+    id="navigationDrawer"
+    class="navigation-drawer"
+    aria-hidden="true"
+  >
+
+    <div class="drawer-header">
+
+      <div class="drawer-title">
+        <strong>SafePath</strong>
+        <span>Fleet Control</span>
+      </div>
+
+      <button
+        id="drawerClose"
+        class="drawer-close"
+        type="button"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <nav class="drawer-navigation">
+
+      <a
+        href="Overview.html"
+        class="active"
+      >
+        Overview
+      </a>
+
+      <a href="vehicles.html">
+        Vehicles
+      </a>
+
+      <a href="livemap.html">
+        Live Map
+      </a>
+
+      <a href="alerts.html">
+        Alerts
+      </a>
+
+      <a href="events.html">
+        Events
+      </a>
+
+      <a href="history.html">
+        History
+      </a>
+<a href="fine.html">
+    Traffic Fine
+</a>
+
+<a href="toll.html">
+    Toll Tax
+</a>
+
+<a href="insurance.html">
+    Insurance and Pollution
+</a>
+<a href="stolen.html">
+  Search Stolen Vehicle
+</a>
+
+<a href="./monitor.html">
+    Monitor
+</a>
+
+    </nav>
+
+  </aside>
+
+
+  <div class="page">
+
+
+    <header class="page-header">
+
+      <div class="header-left">
+
+        <button
+          id="menuButton"
+          class="menu-button"
+          type="button"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+
+        <div class="page-heading">
+
+          <h1>
+            Overview
+          </h1>
+
+          <p>
+            SafePath Fleet Control
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="header-right">
+
+        <div
+          id="connectionStatus"
+          class="connection-status checking"
+        >
+
+          <span class="status-dot"></span>
+
+          <span id="connectionText">
+            Connecting...
+          </span>
+
+        </div>
+
+
+        <button
+          id="refreshButton"
+          class="refresh-button"
+          type="button"
+        >
+          Refresh
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <main class="main-content">
+
+
+      <!-- =================================================
+           SUMMARY
+      ================================================== -->
+
+      <section class="summary-grid">
+
+
+        <div class="summary-card">
+
+          <div class="summary-icon fleet">
+            🚗
+          </div>
+
+          <div>
+
+            <span>
+              TOTAL VEHICLES
+            </span>
+
+            <strong id="totalVehicles">
+              0
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="summary-card online">
+
+          <div class="summary-icon">
+            ●
+          </div>
+
+          <div>
+
+            <span>
+              ONLINE
+            </span>
+
+            <strong id="onlineVehicles">
+              0
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="summary-card offline">
+
+          <div class="summary-icon">
+            ●
+          </div>
+
+          <div>
+
+            <span>
+              OFFLINE
+            </span>
+
+            <strong id="offlineVehicles">
+              0
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <div class="summary-icon">
+            ⚡
+          </div>
+
+          <div>
+
+            <span>
+              ACTIVE TYPES
+            </span>
+
+            <strong id="activeTypes">
+              0
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           MAP + FLEET
+      ================================================== -->
+
+      <section class="dashboard-grid">
+
+
+        <div class="panel map-panel">
+
+          <div class="panel-heading">
+
+            <div>
+
+              <h2>
+                Fleet Live Map
+              </h2>
+
+              <p>
+                Current vehicle positions received from SafePath backend.
+              </p>
+
+            </div>
+
+
+            <a
+              class="panel-link"
+              href="livemap.html"
+            >
+              Open Live Map
+            </a>
+
+          </div>
+
+
+          <div
+            id="overviewMap"
+            class="overview-map"
+          ></div>
+
+        </div>
+
+
+        <div class="panel fleet-panel">
+
+          <div class="panel-heading">
+
+            <div>
+
+              <h2>
+                Fleet Status
+              </h2>
+
+              <p>
+                Current vehicle distribution.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="fleet-type-list">
+
+            <div class="fleet-type-row">
+
+              <div class="type-name">
+
+                <span class="type-dot car"></span>
+
+                <span>
+                  Car
+                </span>
+
+              </div>
+
+              <strong id="carCount">
+                0
+              </strong>
+
+            </div>
+
+
+            <div class="fleet-type-row">
+
+              <div class="type-name">
+
+                <span class="type-dot vip"></span>
+
+                <span>
+                  VIP
+                </span>
+
+              </div>
+
+              <strong id="vipCount">
+                0
+              </strong>
+
+            </div>
+
+
+            <div class="fleet-type-row">
+
+              <div class="type-name">
+
+                <span class="type-dot police"></span>
+
+                <span>
+                  Police
+                </span>
+
+              </div>
+
+              <strong id="policeCount">
+                0
+              </strong>
+
+            </div>
+
+
+            <div class="fleet-type-row">
+
+              <div class="type-name">
+
+                <span class="type-dot fire-engine"></span>
+
+                <span>
+                  Fire Engine
+                </span>
+
+              </div>
+
+              <strong id="fireEngineCount">
+                0
+              </strong>
+
+            </div>
+
+
+            <div class="fleet-type-row">
+
+              <div class="type-name">
+
+                <span class="type-dot ambulance"></span>
+
+                <span>
+                  Ambulance
+                </span>
+
+              </div>
+
+              <strong id="ambulanceCount">
+                0
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <a
+            href="vehicles.html"
+            class="fleet-button"
+          >
+            View All Vehicles
+          </a>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           LATEST VEHICLES
+      ================================================== -->
+
+      <section class="panel vehicles-panel">
+
+        <div class="panel-heading">
+
+          <div>
+
+            <h2>
+              Latest Vehicle Activity
+            </h2>
+
+            <p>
+              Most recently updated vehicles.
+            </p>
+
+          </div>
+
+
+          <a
+            class="panel-link"
+            href="vehicles.html"
+          >
+            View Vehicles
+          </a>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  VEHICLE ID
+                </th>
+
+                <th>
+                  TYPE
+                </th>
+
+                <th>
+                  SPEED
+                </th>
+
+                <th>
+                  HEADING
+                </th>
+
+                <th>
+                  LOCATION
+                </th>
+
+                <th>
+                  STATUS
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody
+              id="vehicleTableBody"
+            ></tbody>
+
+          </table>
+
+        </div>
+
+
+        <div
+          id="vehicleEmpty"
+          class="empty-state"
+        >
+
+          <div>
+            🚗
+          </div>
+
+          <h3>
+            No Vehicles
+          </h3>
+
+          <p>
+            No vehicle telemetry has been received yet.
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           SYSTEM
+      ================================================== -->
+
+      <section class="system-grid">
+
+
+        <div class="system-card">
+
+          <span>
+            BACKEND
+          </span>
+
+          <strong
+            id="backendStatus"
+          >
+            Checking...
+          </strong>
+
+        </div>
+
+
+        <div class="system-card">
+
+          <span>
+            SOCKET.IO
+          </span>
+
+          <strong
+            id="socketStatus"
+          >
+            Checking...
+          </strong>
+
+        </div>
+
+
+        <div class="system-card">
+
+          <span>
+            DATABASE
+          </span>
+
+          <strong>
+            PostgreSQL/PostGIS
+          </strong>
+
+        </div>
+
+
+        <div class="system-card">
+
+          <span>
+            MAP
+          </span>
+
+          <strong>
+            OpenStreetMap
+          </strong>
+
+        </div>
+
+      </section>
+
+
+    </main>
+
+  </div>
+
+
+  <script src="../js/socket.io.min.js"></script>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
+
+  <script src="../js/Overview.js"></script>
+
+</body>
+</html>

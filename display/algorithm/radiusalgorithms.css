@@ -1,0 +1,165 @@
+/*
+ * SafePath
+ * Radius Algorithms
+ *
+ * File:
+ * D:\Sec\safe_path_nodejs\display\algorithm\radiusalgorithms.css
+ *
+ * Purpose:
+ * Supporting styles for the Radius Algorithms module.
+ *
+ * The actual 300-meter radius is rendered by Leaflet
+ * as a geographic circle in radiusalgorithms.js.
+ */
+
+/* ================================================================
+   SafePath Radius Algorithm Layer
+   ================================================================ */
+
+.safepath-radius-algorithm-layer {
+    position: relative;
+    pointer-events: none;
+    z-index: 500;
+}
+
+/* ================================================================
+   Radius Information Panel
+   ================================================================ */
+
+.safepath-radius-panel {
+    position: absolute;
+
+    top: 80px;
+    right: 16px;
+
+    min-width: 220px;
+    max-width: 300px;
+
+    padding: 12px 14px;
+
+    background: rgba(255, 255, 255, 0.96);
+
+    border: 1px solid rgba(0, 0, 0, 0.14);
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.14);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: #111;
+
+    pointer-events: auto;
+}
+
+/* ================================================================
+   Panel Title
+   ================================================================ */
+
+.safepath-radius-panel__title {
+    margin: 0 0 6px 0;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    line-height: 1.3;
+}
+
+/* ================================================================
+   Panel Text
+   ================================================================ */
+
+.safepath-radius-panel__text {
+    margin: 0;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    color: #555;
+}
+
+/* ================================================================
+   Radius Value
+   ================================================================ */
+
+.safepath-radius-panel__radius {
+    font-weight: 700;
+    color: #111;
+}
+
+/* ================================================================
+   Vehicle Radius Indicator
+   ================================================================ */
+
+.safepath-radius-indicator {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 12px;
+    height: 12px;
+
+    margin-right: 6px;
+
+    border: 2px solid #000000;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.03);
+
+    vertical-align: -2px;
+}
+
+/* ================================================================
+   Optional Vehicle Type Labels
+   ================================================================ */
+
+.safepath-radius-car {
+    color: #1976d2;
+}
+
+.safepath-radius-vip {
+    color: #7b1fa2;
+}
+
+.safepath-radius-police {
+    color: #1565c0;
+}
+
+.safepath-radius-fire-engine {
+    color: #d32f2f;
+}
+
+.safepath-radius-ambulance {
+    color: #2e7d32;
+}
+
+/* ================================================================
+   Mobile
+   ================================================================ */
+
+@media (max-width: 768px) {
+    .safepath-radius-panel {
+        top: 72px;
+        right: 10px;
+
+        min-width: 180px;
+        max-width: 240px;
+
+        padding: 10px 12px;
+    }
+
+    .safepath-radius-panel__title {
+        font-size: 13px;
+    }
+
+    .safepath-radius-panel__text {
+        font-size: 11px;
+    }
+}

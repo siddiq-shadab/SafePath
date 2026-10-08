@@ -1,0 +1,3367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>SafePath - Toll Tax</title>
+
+    <style>
+        :root {
+            --bg: #f5f7fb;
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+            --border: #e5e7eb;
+            --text: #111827;
+            --muted: #6b7280;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #16a34a;
+            --success-soft: #dcfce7;
+            --warning: #d97706;
+            --warning-soft: #fef3c7;
+            --danger: #dc2626;
+            --danger-soft: #fee2e2;
+            --purple: #7c3aed;
+            --purple-soft: #ede9fe;
+            --cyan: #0891b2;
+            --cyan-soft: #cffafe;
+            --shadow: 0 8px 30px rgba(15, 23, 42, 0.07);
+            --radius: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .top-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 22px;
+
+            background: rgba(255, 255, 255, 0.97);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .menu-button {
+            width: 42px;
+            height: 42px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fff;
+
+            color: var(--text);
+            font-size: 22px;
+
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .menu-button:hover {
+            background: var(--surface-soft);
+            border-color: #cbd5e1;
+        }
+
+        .menu-button:active {
+            transform: scale(0.96);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .brand-title {
+            font-size: 18px;
+            font-weight: 750;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-subtitle {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 9px 13px;
+
+            border: 1px solid var(--border);
+            border-radius: 999px;
+
+            background: #fff;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .connection-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.10);
+        }
+
+        .connection-status.offline .connection-dot {
+            background: var(--danger);
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.10);
+        }
+
+        /* =========================================================
+           DRAWER
+        ========================================================= */
+
+        .navigation-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+
+            background: rgba(15, 23, 42, 0.45);
+
+            opacity: 0;
+            visibility: hidden;
+
+            transition:
+                opacity 0.25s ease,
+                visibility 0.25s ease;
+        }
+
+        .navigation-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .navigation-drawer {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 310px;
+            max-width: 88vw;
+            height: 100%;
+
+            padding: 20px;
+
+            background: #fff;
+            box-shadow: 15px 0 40px rgba(15, 23, 42, 0.16);
+
+            transform: translateX(-100%);
+            transition: transform 0.28s ease;
+
+            overflow-y: auto;
+        }
+
+        .navigation-overlay.open .navigation-drawer {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .drawer-title {
+            font-size: 18px;
+            font-weight: 750;
+        }
+
+        .drawer-close {
+            width: 38px;
+            height: 38px;
+
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fff;
+
+            font-size: 20px;
+        }
+
+        .drawer-close:hover {
+            background: var(--surface-soft);
+        }
+
+        .drawer-navigation {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            margin-top: 18px;
+        }
+
+        .drawer-navigation a {
+            display: flex;
+            align-items: center;
+
+            min-height: 46px;
+            padding: 0 13px;
+
+            border-radius: 10px;
+
+            color: #374151;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .drawer-navigation a:hover {
+            background: #eff6ff;
+            color: var(--primary);
+        }
+
+        .drawer-navigation a.active {
+            background: #dbeafe;
+            color: var(--primary-dark);
+        }
+
+        .drawer-footer {
+            margin-top: 25px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .page-container {
+            width: min(1500px, calc(100% - 36px));
+            margin: 0 auto;
+
+            padding: 28px 0 60px;
+        }
+
+        .page-heading {
+            margin-bottom: 24px;
+        }
+
+        .page-heading h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: -0.6px;
+        }
+
+        .page-heading p {
+            margin: 7px 0 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* =========================================================
+           FILTER PANEL
+        ========================================================= */
+
+        .filter-panel {
+            display: grid;
+            grid-template-columns:
+                minmax(280px, 1.6fr)
+                minmax(170px, 0.8fr)
+                minmax(180px, 0.8fr)
+                minmax(180px, 0.8fr);
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+            padding: 18px;
+
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .field label {
+            color: #374151;
+            font-size: 12px;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: 0.45px;
+        }
+
+        .field select,
+        .field input {
+            width: 100%;
+            height: 44px;
+
+            padding: 0 12px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+
+            background: #fff;
+            color: var(--text);
+
+            outline: none;
+        }
+
+        .field select:focus,
+        .field input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+        .period-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .period-controls select {
+            flex: 1;
+        }
+
+        /* =========================================================
+           SUMMARY CARDS
+        ========================================================= */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            position: relative;
+
+            min-height: 145px;
+            padding: 20px;
+
+            overflow: hidden;
+
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+
+            box-shadow: var(--shadow);
+        }
+
+        .summary-card::after {
+            content: "";
+
+            position: absolute;
+            right: -30px;
+            bottom: -45px;
+
+            width: 120px;
+            height: 120px;
+
+            border-radius: 50%;
+            background: rgba(37, 99, 235, 0.055);
+        }
+
+        .summary-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .summary-value {
+            margin-top: 12px;
+
+            font-size: 29px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+        }
+
+        .summary-description {
+            margin-top: 6px;
+
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .summary-icon {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .summary-card.blue .summary-icon {
+            background: #dbeafe;
+            color: var(--primary);
+        }
+
+        .summary-card.green .summary-icon {
+            background: var(--success-soft);
+            color: var(--success);
+        }
+
+        .summary-card.purple .summary-icon {
+            background: var(--purple-soft);
+            color: var(--purple);
+        }
+
+        .summary-card.orange .summary-icon {
+            background: var(--warning-soft);
+            color: var(--warning);
+        }
+
+        /* =========================================================
+           SECTION
+        ========================================================= */
+
+        .section {
+            margin-bottom: 20px;
+
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            min-height: 64px;
+            padding: 0 20px;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-title {
+            margin: 0;
+
+            font-size: 16px;
+            font-weight: 750;
+        }
+
+        .section-subtitle {
+            margin-top: 4px;
+
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .section-body {
+            padding: 20px;
+        }
+
+        /* =========================================================
+           VEHICLE TAX TABLE
+        ========================================================= */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 12px 14px;
+
+            background: var(--surface-soft);
+            border-bottom: 1px solid var(--border);
+
+            color: #4b5563;
+            font-size: 11px;
+            font-weight: 800;
+
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 0.45px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px;
+
+            border-bottom: 1px solid #eef0f3;
+
+            color: #374151;
+            font-size: 13px;
+
+            white-space: nowrap;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        tbody tr:hover {
+            background: #fafcff;
+        }
+
+        .vehicle-type-cell {
+            color: var(--text);
+            font-weight: 650;
+        }
+
+        .money {
+            font-weight: 750;
+        }
+
+        .pass-badge {
+            display: inline-flex;
+            align-items: center;
+
+            min-height: 27px;
+            padding: 0 9px;
+
+            border-radius: 999px;
+
+            background: #f1f5f9;
+            color: #475569;
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .highlight-row {
+            background: #f0fdf4;
+        }
+
+        .highlight-row:hover {
+            background: #ecfdf5;
+        }
+
+        /* =========================================================
+           ANALYTICS GRID
+        ========================================================= */
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+
+            margin-bottom: 20px;
+        }
+
+        .chart-card {
+            min-width: 0;
+
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .chart-header {
+            padding: 18px 20px;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chart-header h3 {
+            margin: 0;
+
+            font-size: 15px;
+        }
+
+        .chart-header p {
+            margin: 5px 0 0;
+
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .chart-body {
+            padding: 20px;
+        }
+
+        .bar-row {
+            display: grid;
+            grid-template-columns: minmax(125px, 1fr) 2.5fr 70px;
+            align-items: center;
+            gap: 12px;
+
+            margin-bottom: 15px;
+        }
+
+        .bar-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .bar-label {
+            color: #374151;
+            font-size: 11px;
+            font-weight: 650;
+        }
+
+        .bar-track {
+            height: 10px;
+
+            overflow: hidden;
+
+            border-radius: 999px;
+            background: #edf1f5;
+        }
+
+        .bar-fill {
+            height: 100%;
+
+            border-radius: inherit;
+            background: var(--primary);
+
+            transition: width 0.5s ease;
+        }
+
+        .bar-value {
+            color: #374151;
+            font-size: 11px;
+            font-weight: 750;
+            text-align: right;
+        }
+
+        /* =========================================================
+           PERIOD REPORT
+        ========================================================= */
+
+        .period-report {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+
+            margin-bottom: 20px;
+        }
+
+        .period-box {
+            padding: 17px;
+
+            border: 1px solid var(--border);
+            border-radius: 12px;
+
+            background: var(--surface-soft);
+        }
+
+        .period-box-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 750;
+            text-transform: uppercase;
+        }
+
+        .period-box-value {
+            margin-top: 7px;
+
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .period-box-description {
+            margin-top: 4px;
+
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           RATE CARD
+        ========================================================= */
+
+        .rate-note {
+            margin-bottom: 15px;
+            padding: 12px 14px;
+
+            border-left: 4px solid var(--primary);
+            border-radius: 7px;
+
+            background: #eff6ff;
+            color: #1e40af;
+
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* =========================================================
+           TOLL PASSAGE
+        ========================================================= */
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+
+            min-height: 26px;
+            padding: 0 9px;
+
+            border-radius: 999px;
+
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .status-badge.single {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-badge.monthly {
+            background: var(--success-soft);
+            color: #15803d;
+        }
+
+        /* =========================================================
+           VEHICLE HISTORY
+        ========================================================= */
+
+        .history-intro {
+            margin-bottom: 20px;
+
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .history-controls {
+            display: grid;
+            grid-template-columns:
+                minmax(200px, 1fr)
+                minmax(190px, 1fr)
+                minmax(190px, 1fr)
+                minmax(150px, 0.7fr)
+                auto;
+
+            gap: 12px;
+            align-items: end;
+
+            margin-bottom: 20px;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            height: 44px;
+
+            padding: 0 16px;
+
+            border: 1px solid transparent;
+            border-radius: 9px;
+
+            font-size: 12px;
+            font-weight: 750;
+
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: #fff;
+            border-color: #d1d5db;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-soft);
+        }
+
+        .history-empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 180px;
+
+            border: 1px dashed #cbd5e1;
+            border-radius: 10px;
+
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .history-table {
+            display: none;
+        }
+
+        .history-table.visible {
+            display: block;
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .page-footer {
+            margin-top: 30px;
+
+            color: #9ca3af;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1100px) {
+            .filter-panel {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .history-controls {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .history-actions {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .page-container {
+                width: min(100% - 24px, 1500px);
+                padding-top: 20px;
+            }
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .period-report {
+                grid-template-columns: 1fr;
+            }
+
+            .top-header {
+                padding: 0 12px;
+            }
+
+            .brand-subtitle {
+                display: none;
+            }
+
+            .connection-status span:last-child {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .filter-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .history-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .history-actions {
+                grid-column: auto;
+            }
+
+            .history-actions .btn {
+                flex: 1;
+            }
+
+            .page-heading h1 {
+                font-size: 24px;
+            }
+
+            .section-header {
+                padding: 0 15px;
+            }
+
+            .section-body {
+                padding: 15px;
+            }
+
+            .summary-card {
+                min-height: 125px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =============================================================
+     NAVIGATION DRAWER
+============================================================== -->
+
+<div
+    class="navigation-overlay"
+    id="navigationOverlay"
+    aria-hidden="true"
+>
+    <aside
+        class="navigation-drawer"
+        aria-label="SafePath navigation"
+    >
+        <div class="drawer-header">
+            <div class="drawer-title">SafePath</div>
+
+            <button
+                class="drawer-close"
+                id="closeMenuButton"
+                type="button"
+                aria-label="Close menu"
+            >
+                ×
+            </button>
+        </div>
+
+        <nav class="drawer-navigation">
+            <a href="./Overview.html">Overview</a>
+            <a href="./vehicles.html">Vehicles</a>
+            <a href="./livemap.html">Live Map</a>
+            <a href="./alerts.html">Alerts</a>
+            <a href="./events.html">Events</a>
+            <a href="./history.html">History</a>
+            <a href="./fine.html">Traffic Fine</a>
+            <a
+                href="./toll.html"
+                class="active"
+            >
+                Toll Tax
+            </a>
+            <a href="./insurance.html">
+                Insurance and Pollution
+            </a>
+
+
+            <a href="stolen.html">
+  Search Stolen Vehicle
+</a>
+
+<a href="./monitor.html">
+    Monitor
+</a>
+        </nav>
+
+        <div class="drawer-footer">
+            SafePath Road Safety and Vehicle Monitoring Platform
+            <br />
+            Toll Tax Demonstration Module
+        </div>
+    </aside>
+</div>
+
+
+<!-- =============================================================
+     HEADER
+============================================================== -->
+
+<header class="top-header">
+
+    <div class="header-left">
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            type="button"
+            aria-label="Open navigation"
+        >
+            ☰
+        </button>
+
+        <div class="brand">
+
+            <img
+                class="brand-logo"
+                src="../asset/logo.png"
+                alt="SafePath"
+                onerror="this.style.display='none';"
+            />
+
+            <div class="brand-text">
+                <div class="brand-title">
+                    SafePath
+                </div>
+
+                <div class="brand-subtitle">
+                    Road Safety & Vehicle Monitoring
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div
+        class="connection-status"
+        id="connectionStatus"
+    >
+        <span class="connection-dot"></span>
+        <span id="connectionText">
+            Demo Mode
+        </span>
+    </div>
+
+</header>
+
+
+<!-- =============================================================
+     MAIN PAGE
+============================================================== -->
+
+<main class="page-container">
+
+    <section class="page-heading">
+
+        <h1>Toll Tax</h1>
+
+        <p>
+            Toll collection, vehicle passage and historical
+            telemetry demonstration.
+        </p>
+
+    </section>
+
+
+    <!-- =========================================================
+         FILTERS
+    ========================================================== -->
+
+    <section class="filter-panel">
+
+        <div class="field">
+
+            <label for="tollPlaza">
+                Toll Plaza
+            </label>
+
+            <select id="tollPlaza">
+
+                <option value="renikunta">
+                    Renikunta Toll Gate, KNR-HYD Rd
+                </option>
+
+                <option value="hkr">
+                    HKR Roadways Toll Plaza - Karimnagar
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="reportPeriod">
+                Report Period
+            </label>
+
+            <select id="reportPeriod">
+
+                <option value="day">
+                    Day
+                </option>
+
+                <option value="month">
+                    Month
+                </option>
+
+                <option value="year">
+                    Year
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div
+            class="field"
+            id="dateField"
+        >
+
+            <label for="reportDate">
+                Date
+            </label>
+
+            <input
+                type="date"
+                id="reportDate"
+                value="2026-10-06"
+            />
+
+        </div>
+
+
+        <div
+            class="field"
+            id="monthField"
+            style="display:none;"
+        >
+
+            <label for="reportMonth">
+                Month
+            </label>
+
+            <div class="period-controls">
+
+                <select id="reportMonth">
+
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4">May</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9" selected>October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="field"
+            id="yearField"
+            style="display:none;"
+        >
+
+            <label for="reportYear">
+                Year
+            </label>
+
+            <select id="reportYear">
+
+                <option>2024</option>
+                <option>2025</option>
+                <option selected>2026</option>
+                <option>2027</option>
+
+            </select>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         SUMMARY CARDS
+    ========================================================== -->
+
+    <section class="summary-grid">
+
+        <article class="summary-card blue">
+
+            <div class="summary-icon">
+                🚗
+            </div>
+
+            <div class="summary-label">
+                Vehicles Passed
+            </div>
+
+            <div
+                class="summary-value"
+                id="totalVehicles"
+            >
+                2,184
+            </div>
+
+            <div
+                class="summary-description"
+                id="periodDescription"
+            >
+                Today
+            </div>
+
+        </article>
+
+
+        <article class="summary-card green">
+
+            <div class="summary-icon">
+                ₹
+            </div>
+
+            <div class="summary-label">
+                Tax Collected
+            </div>
+
+            <div
+                class="summary-value"
+                id="totalTax"
+            >
+                ₹2,84,736
+            </div>
+
+            <div class="summary-description">
+                Total toll collection
+            </div>
+
+        </article>
+
+
+        <article class="summary-card purple">
+
+            <div class="summary-icon">
+                ↗
+            </div>
+
+            <div class="summary-label">
+                Single Journeys
+            </div>
+
+            <div
+                class="summary-value"
+                id="singleJourneys"
+            >
+                2,100
+            </div>
+
+            <div class="summary-description">
+                Single journey transactions
+            </div>
+
+        </article>
+
+
+        <article class="summary-card orange">
+
+            <div class="summary-icon">
+                P
+            </div>
+
+            <div class="summary-label">
+                Monthly Passes
+            </div>
+
+            <div
+                class="summary-value"
+                id="monthlyPasses"
+            >
+                84
+            </div>
+
+            <div class="summary-description">
+                Pass transactions
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- =========================================================
+         VEHICLE TYPE STATISTICS
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+                <h2 class="section-title">
+                    Vehicle Type Toll Statistics
+                </h2>
+
+                <div
+                    class="section-subtitle"
+                    id="vehicleStatisticsSubtitle"
+                >
+                    Renikunta Toll Gate, KNR-HYD Rd
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section-body">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Vehicle Type</th>
+                            <th>Vehicles Passed</th>
+                            <th>Single Journey Fee</th>
+                            <th>Monthly Pass Fee</th>
+                            <th>Tax Collected</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="vehicleStatisticsBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         ANALYTICS
+    ========================================================== -->
+
+    <section class="analytics-grid">
+
+        <article class="chart-card">
+
+            <div class="chart-header">
+
+                <h3>
+                    Vehicles Passed by Type
+                </h3>
+
+                <p>
+                    Vehicle traffic distribution
+                </p>
+
+            </div>
+
+            <div
+                class="chart-body"
+                id="vehicleChart"
+            >
+            </div>
+
+        </article>
+
+
+        <article class="chart-card">
+
+            <div class="chart-header">
+
+                <h3>
+                    Tax Collection by Type
+                </h3>
+
+                <p>
+                    Revenue contribution by vehicle category
+                </p>
+
+            </div>
+
+            <div
+                class="chart-body"
+                id="taxChart"
+            >
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- =========================================================
+         PERIOD REPORT
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2 class="section-title">
+                    Period Summary
+                </h2>
+
+                <div class="section-subtitle">
+                    Day, month and year collection overview
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="section-body">
+
+            <div class="period-report">
+
+                <div class="period-box">
+
+                    <div class="period-box-label">
+                        Selected Period
+                    </div>
+
+                    <div
+                        class="period-box-value"
+                        id="selectedPeriodLabel"
+                    >
+                        Today
+                    </div>
+
+                    <div class="period-box-description">
+                        Current report selection
+                    </div>
+
+                </div>
+
+
+                <div class="period-box">
+
+                    <div class="period-box-label">
+                        Average Tax / Vehicle
+                    </div>
+
+                    <div
+                        class="period-box-value"
+                        id="averageTax"
+                    >
+                        ₹130.37
+                    </div>
+
+                    <div class="period-box-description">
+                        Average collection per vehicle
+                    </div>
+
+                </div>
+
+
+                <div class="period-box">
+
+                    <div class="period-box-label">
+                        Selected Toll Plaza
+                    </div>
+
+                    <div
+                        class="period-box-value"
+                        id="selectedPlazaShort"
+                        style="font-size:17px;"
+                    >
+                        Renikunta
+                    </div>
+
+                    <div class="period-box-description">
+                        Active toll reporting location
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         RATE CARD
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2 class="section-title">
+                    Toll Tax Rate Card
+                </h2>
+
+                <div class="section-subtitle">
+                    Applicable demo tariff
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="section-body">
+
+            <div class="rate-note">
+                Demo tariff shown below. Actual toll transaction
+                amounts should be supplied by the production toll
+                collection system.
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Vehicle Type</th>
+                            <th>Single Journey Fee</th>
+                            <th>Monthly Pass Fee</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td class="vehicle-type-cell">
+                                Car / Jeep / Van
+                            </td>
+
+                            <td class="money">
+                                ₹72
+                            </td>
+
+                            <td class="money">
+                                ₹405
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="vehicle-type-cell">
+                                Light Commercial Vehicle (LCV)
+                            </td>
+
+                            <td class="money">
+                                ₹143
+                            </td>
+
+                            <td>
+                                —
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="vehicle-type-cell">
+                                Bus / Truck
+                            </td>
+
+                            <td class="money">
+                                ₹286
+                            </td>
+
+                            <td>
+                                —
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="vehicle-type-cell">
+                                Upto 3 Axle Vehicle
+                            </td>
+
+                            <td class="money">
+                                ₹716
+                            </td>
+
+                            <td>
+                                —
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="vehicle-type-cell">
+                                4 to 6 Axle Vehicle
+                            </td>
+
+                            <td class="money">
+                                ₹716
+                            </td>
+
+                            <td>
+                                —
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="vehicle-type-cell">
+                                HCM / EME
+                            </td>
+
+                            <td class="money">
+                                ₹716
+                            </td>
+
+                            <td>
+                                —
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="vehicle-type-cell">
+                                7 or more Axle Vehicle
+                            </td>
+
+                            <td class="money">
+                                ₹716
+                            </td>
+
+                            <td>
+                                —
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         TOLL PASSAGE HISTORY
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2 class="section-title">
+                    Toll Passage History
+                </h2>
+
+                <div class="section-subtitle">
+                    Recent demo toll transactions
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="section-body">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Time</th>
+                            <th>Vehicle ID</th>
+                            <th>Vehicle Type</th>
+                            <th>Toll Plaza</th>
+                            <th>Journey Type</th>
+                            <th>Fee</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="passageHistoryBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         VEHICLE HISTORY
+    ========================================================== -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2 class="section-title">
+                    Vehicle History
+                </h2>
+
+                <div class="section-subtitle">
+                    PostgreSQL / PostGIS telemetry
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="section-body">
+
+            <div class="history-intro">
+                View historical telemetry stored in PostgreSQL/PostGIS.
+                Select a vehicle, date range and maximum number of
+                records to load its historical telemetry.
+            </div>
+
+
+            <div class="history-controls">
+
+                <div class="field">
+
+                    <label for="historyVehicle">
+                        Vehicle
+                    </label>
+
+                    <select id="historyVehicle">
+
+                        <option value="">
+                            Select Vehicle
+                        </option>
+
+                        <option value="TS02ER8769">
+                            TS02ER8769
+                        </option>
+
+                        <option value="TS02EZ1234">
+                            TS02EZ1234
+                        </option>
+
+                        <option value="VEHICLE_001">
+                            VEHICLE_001
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="historyFrom">
+                        From
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        id="historyFrom"
+                        value="2026-10-05T00:00"
+                    />
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="historyTo">
+                        To
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        id="historyTo"
+                        value="2026-10-06T23:59"
+                    />
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="historyRecords">
+                        Records
+                    </label>
+
+                    <select id="historyRecords">
+
+                        <option value="100">
+                            100
+                        </option>
+
+                        <option value="500">
+                            500
+                        </option>
+
+                        <option value="1000">
+                            1,000
+                        </option>
+
+                        <option value="5000">
+                            5,000
+                        </option>
+
+                        <option value="10000">
+                            10,000
+                        </option>
+
+                        <option value="50000">
+                            50,000
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="history-actions">
+
+                    <button
+                        class="btn btn-primary"
+                        id="loadHistoryButton"
+                        type="button"
+                    >
+                        Load History
+                    </button>
+
+                    <button
+                        class="btn btn-secondary"
+                        id="clearHistoryButton"
+                        type="button"
+                    >
+                        Clear
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="history-empty"
+                id="historyEmpty"
+            >
+                Select a vehicle and click "Load History".
+            </div>
+
+
+            <div
+                class="history-table"
+                id="historyTable"
+            >
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Vehicle ID</th>
+                                <th>Vehicle Type</th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+                                <th>Speed</th>
+                                <th>Heading</th>
+                                <th>Accuracy</th>
+                                <th>Recorded At</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="historyTableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <div class="page-footer">
+        SafePath Toll Tax Demo • PostgreSQL/PostGIS vehicle history
+        integration ready
+    </div>
+
+</main>
+
+
+<script>
+"use strict";
+
+/* ===============================================================
+   SAFEPATH TOLL TAX DEMO
+================================================================ */
+
+const TOLL_RATES = {
+    "Car / Jeep / Van": {
+        single: 72,
+        monthly: 405
+    },
+
+    "Light Commercial Vehicle (LCV)": {
+        single: 143,
+        monthly: null
+    },
+
+    "Bus / Truck": {
+        single: 286,
+        monthly: null
+    },
+
+    "Upto 3 Axle Vehicle": {
+        single: 716,
+        monthly: null
+    },
+
+    "4 to 6 Axle Vehicle": {
+        single: 716,
+        monthly: null
+    },
+
+    "HCM / EME": {
+        single: 716,
+        monthly: null
+    },
+
+    "7 or more Axle Vehicle": {
+        single: 716,
+        monthly: null
+    }
+};
+
+
+/* ===============================================================
+   DEMO DATA
+================================================================ */
+
+const DEMO_DATA = {
+
+    renikunta: {
+
+        name:
+            "Renikunta Toll Gate, KNR-HYD Rd",
+
+        shortName:
+            "Renikunta",
+
+        day: {
+
+            vehicles: 2184,
+
+            tax: 284736,
+
+            single: 2100,
+
+            monthly: 84,
+
+            vehicleTypes: {
+
+                "Car / Jeep / Van": 1248,
+
+                "Light Commercial Vehicle (LCV)": 437,
+
+                "Bus / Truck": 182,
+
+                "Upto 3 Axle Vehicle": 64,
+
+                "4 to 6 Axle Vehicle": 31,
+
+                "HCM / EME": 12,
+
+                "7 or more Axle Vehicle": 8
+            }
+        },
+
+        month: {
+
+            vehicles: 64280,
+
+            tax: 8452610,
+
+            single: 61790,
+
+            monthly: 2490,
+
+            vehicleTypes: {
+
+                "Car / Jeep / Van": 37200,
+
+                "Light Commercial Vehicle (LCV)": 12850,
+
+                "Bus / Truck": 8450,
+
+                "Upto 3 Axle Vehicle": 2130,
+
+                "4 to 6 Axle Vehicle": 1820,
+
+                "HCM / EME": 1030,
+
+                "7 or more Axle Vehicle": 800
+            }
+        },
+
+        year: {
+
+            vehicles: 748620,
+
+            tax: 98426740,
+
+            single: 718440,
+
+            monthly: 30180,
+
+            vehicleTypes: {
+
+                "Car / Jeep / Van": 426300,
+
+                "Light Commercial Vehicle (LCV)": 150200,
+
+                "Bus / Truck": 100480,
+
+                "Upto 3 Axle Vehicle": 24600,
+
+                "4 to 6 Axle Vehicle": 19200,
+
+                "HCM / EME": 15400,
+
+                "7 or more Axle Vehicle": 12440
+            }
+        }
+    },
+
+
+    hkr: {
+
+        name:
+            "HKR Roadways Toll Plaza - Karimnagar",
+
+        shortName:
+            "HKR Roadways",
+
+        day: {
+
+            vehicles: 1742,
+
+            tax: 226842,
+
+            single: 1680,
+
+            monthly: 62,
+
+            vehicleTypes: {
+
+                "Car / Jeep / Van": 914,
+
+                "Light Commercial Vehicle (LCV)": 362,
+
+                "Bus / Truck": 248,
+
+                "Upto 3 Axle Vehicle": 74,
+
+                "4 to 6 Axle Vehicle": 52,
+
+                "HCM / EME": 44,
+
+                "7 or more Axle Vehicle": 48
+            }
+        },
+
+        month: {
+
+            vehicles: 52180,
+
+            tax: 6784120,
+
+            single: 50120,
+
+            monthly: 2060,
+
+            vehicleTypes: {
+
+                "Car / Jeep / Van": 26840,
+
+                "Light Commercial Vehicle (LCV)": 11680,
+
+                "Bus / Truck": 7860,
+
+                "Upto 3 Axle Vehicle": 2310,
+
+                "4 to 6 Axle Vehicle": 1540,
+
+                "HCM / EME": 1040,
+
+                "7 or more Axle Vehicle": 910
+            }
+        },
+
+        year: {
+
+            vehicles: 612540,
+
+            tax: 79542600,
+
+            single: 588700,
+
+            monthly: 23840,
+
+            vehicleTypes: {
+
+                "Car / Jeep / Van": 315800,
+
+                "Light Commercial Vehicle (LCV)": 137400,
+
+                "Bus / Truck": 90200,
+
+                "Upto 3 Axle Vehicle": 28200,
+
+                "4 to 6 Axle Vehicle": 16500,
+
+                "HCM / EME": 13240,
+
+                "7 or more Axle Vehicle": 11200
+            }
+        }
+    }
+};
+
+
+/* ===============================================================
+   DOM
+================================================================ */
+
+const elements = {
+
+    menuButton:
+        document.getElementById("menuButton"),
+
+    closeMenuButton:
+        document.getElementById("closeMenuButton"),
+
+    navigationOverlay:
+        document.getElementById("navigationOverlay"),
+
+    tollPlaza:
+        document.getElementById("tollPlaza"),
+
+    reportPeriod:
+        document.getElementById("reportPeriod"),
+
+    reportDate:
+        document.getElementById("reportDate"),
+
+    reportMonth:
+        document.getElementById("reportMonth"),
+
+    reportYear:
+        document.getElementById("reportYear"),
+
+    dateField:
+        document.getElementById("dateField"),
+
+    monthField:
+        document.getElementById("monthField"),
+
+    yearField:
+        document.getElementById("yearField"),
+
+    totalVehicles:
+        document.getElementById("totalVehicles"),
+
+    totalTax:
+        document.getElementById("totalTax"),
+
+    singleJourneys:
+        document.getElementById("singleJourneys"),
+
+    monthlyPasses:
+        document.getElementById("monthlyPasses"),
+
+    periodDescription:
+        document.getElementById("periodDescription"),
+
+    vehicleStatisticsSubtitle:
+        document.getElementById("vehicleStatisticsSubtitle"),
+
+    vehicleStatisticsBody:
+        document.getElementById("vehicleStatisticsBody"),
+
+    vehicleChart:
+        document.getElementById("vehicleChart"),
+
+    taxChart:
+        document.getElementById("taxChart"),
+
+    selectedPeriodLabel:
+        document.getElementById("selectedPeriodLabel"),
+
+    averageTax:
+        document.getElementById("averageTax"),
+
+    selectedPlazaShort:
+        document.getElementById("selectedPlazaShort"),
+
+    passageHistoryBody:
+        document.getElementById("passageHistoryBody"),
+
+    historyVehicle:
+        document.getElementById("historyVehicle"),
+
+    historyFrom:
+        document.getElementById("historyFrom"),
+
+    historyTo:
+        document.getElementById("historyTo"),
+
+    historyRecords:
+        document.getElementById("historyRecords"),
+
+    loadHistoryButton:
+        document.getElementById("loadHistoryButton"),
+
+    clearHistoryButton:
+        document.getElementById("clearHistoryButton"),
+
+    historyEmpty:
+        document.getElementById("historyEmpty"),
+
+    historyTable:
+        document.getElementById("historyTable"),
+
+    historyTableBody:
+        document.getElementById("historyTableBody")
+};
+
+
+/* ===============================================================
+   FORMATTERS
+================================================================ */
+
+function formatNumber(value) {
+
+    return Number(value || 0).toLocaleString(
+        "en-IN"
+    );
+}
+
+
+function formatCurrency(value) {
+
+    return "₹" + Number(value || 0).toLocaleString(
+        "en-IN"
+    );
+}
+
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* ===============================================================
+   NAVIGATION
+================================================================ */
+
+function openNavigation() {
+
+    elements.navigationOverlay.classList.add(
+        "open"
+    );
+
+    elements.navigationOverlay.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.style.overflow = "hidden";
+}
+
+
+function closeNavigation() {
+
+    elements.navigationOverlay.classList.remove(
+        "open"
+    );
+
+    elements.navigationOverlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.style.overflow = "";
+}
+
+
+elements.menuButton.addEventListener(
+    "click",
+    openNavigation
+);
+
+
+elements.closeMenuButton.addEventListener(
+    "click",
+    closeNavigation
+);
+
+
+elements.navigationOverlay.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            event.target ===
+            elements.navigationOverlay
+        ) {
+            closeNavigation();
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Escape") {
+            closeNavigation();
+        }
+
+    }
+);
+
+
+/* ===============================================================
+   REPORT PERIOD UI
+================================================================ */
+
+function updatePeriodFields() {
+
+    const period =
+        elements.reportPeriod.value;
+
+    elements.dateField.style.display =
+        period === "day"
+            ? "flex"
+            : "none";
+
+    elements.monthField.style.display =
+        period === "month"
+            ? "flex"
+            : "none";
+
+    elements.yearField.style.display =
+        period === "year"
+            ? "flex"
+            : "none";
+}
+
+
+/* ===============================================================
+   CURRENT DATA
+================================================================ */
+
+function getCurrentData() {
+
+    const plaza =
+        elements.tollPlaza.value;
+
+    const period =
+        elements.reportPeriod.value;
+
+    return DEMO_DATA[plaza][period];
+}
+
+
+function getCurrentPlaza() {
+
+    return DEMO_DATA[
+        elements.tollPlaza.value
+    ];
+}
+
+
+/* ===============================================================
+   PERIOD LABEL
+================================================================ */
+
+function getPeriodLabel() {
+
+    const period =
+        elements.reportPeriod.value;
+
+    if (period === "day") {
+
+        const date =
+            new Date(
+                elements.reportDate.value +
+                "T00:00:00"
+            );
+
+        return date.toLocaleDateString(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        );
+    }
+
+
+    if (period === "month") {
+
+        const month =
+            Number(
+                elements.reportMonth.value
+            );
+
+        const year =
+            Number(
+                elements.reportYear.value
+            );
+
+        return new Date(
+            year,
+            month,
+            1
+        ).toLocaleDateString(
+            "en-IN",
+            {
+                month: "long",
+                year: "numeric"
+            }
+        );
+    }
+
+
+    return elements.reportYear.value;
+}
+
+
+/* ===============================================================
+   SUMMARY
+================================================================ */
+
+function renderSummary() {
+
+    const data =
+        getCurrentData();
+
+    const plaza =
+        getCurrentPlaza();
+
+    const period =
+        elements.reportPeriod.value;
+
+    elements.totalVehicles.textContent =
+        formatNumber(
+            data.vehicles
+        );
+
+    elements.totalTax.textContent =
+        formatCurrency(
+            data.tax
+        );
+
+    elements.singleJourneys.textContent =
+        formatNumber(
+            data.single
+        );
+
+    elements.monthlyPasses.textContent =
+        formatNumber(
+            data.monthly
+        );
+
+    elements.periodDescription.textContent =
+        getPeriodLabel();
+
+    elements.vehicleStatisticsSubtitle.textContent =
+        plaza.name;
+
+    elements.selectedPeriodLabel.textContent =
+        getPeriodLabel();
+
+    elements.selectedPlazaShort.textContent =
+        plaza.shortName;
+
+    const average =
+        data.vehicles > 0
+            ? data.tax / data.vehicles
+            : 0;
+
+    elements.averageTax.textContent =
+        formatCurrency(
+            average.toFixed(2)
+        );
+}
+
+
+/* ===============================================================
+   VEHICLE STATISTICS
+================================================================ */
+
+function renderVehicleStatistics() {
+
+    const data =
+        getCurrentData();
+
+    let html = "";
+
+    Object.keys(
+        TOLL_RATES
+    ).forEach(
+        function (vehicleType) {
+
+            const count =
+                data.vehicleTypes[
+                    vehicleType
+                ] || 0;
+
+            const rate =
+                TOLL_RATES[
+                    vehicleType
+                ];
+
+            const estimatedTax =
+                count *
+                rate.single;
+
+            const isLCV =
+                vehicleType ===
+                "Light Commercial Vehicle (LCV)";
+
+            html += `
+                <tr class="${
+                    isLCV
+                        ? "highlight-row"
+                        : ""
+                }">
+
+                    <td class="vehicle-type-cell">
+                        ${escapeHtml(vehicleType)}
+                    </td>
+
+                    <td>
+                        ${formatNumber(count)}
+                    </td>
+
+                    <td class="money">
+                        ${formatCurrency(rate.single)}
+                    </td>
+
+                    <td>
+                        ${
+                            rate.monthly === null
+                                ? "—"
+                                : formatCurrency(rate.monthly)
+                        }
+                    </td>
+
+                    <td class="money">
+                        ${formatCurrency(estimatedTax)}
+                    </td>
+
+                </tr>
+            `;
+        }
+    );
+
+    elements.vehicleStatisticsBody.innerHTML =
+        html;
+}
+
+
+/* ===============================================================
+   VEHICLE BAR CHART
+================================================================ */
+
+function renderVehicleChart() {
+
+    const data =
+        getCurrentData();
+
+    const entries =
+        Object.entries(
+            data.vehicleTypes
+        );
+
+    const max =
+        Math.max(
+            ...entries.map(
+                ([, value]) =>
+                    Number(value)
+            )
+        );
+
+    let html = "";
+
+    entries.forEach(
+        function ([vehicleType, value]) {
+
+            const percentage =
+                max > 0
+                    ? (
+                        Number(value) /
+                        max
+                    ) * 100
+                    : 0;
+
+            html += `
+                <div class="bar-row">
+
+                    <div class="bar-label">
+                        ${escapeHtml(vehicleType)}
+                    </div>
+
+                    <div class="bar-track">
+
+                        <div
+                            class="bar-fill"
+                            style="width:${percentage}%"
+                        ></div>
+
+                    </div>
+
+                    <div class="bar-value">
+                        ${formatNumber(value)}
+                    </div>
+
+                </div>
+            `;
+        }
+    );
+
+    elements.vehicleChart.innerHTML =
+        html;
+}
+
+
+/* ===============================================================
+   TAX BAR CHART
+================================================================ */
+
+function renderTaxChart() {
+
+    const data =
+        getCurrentData();
+
+    const entries =
+        Object.entries(
+            data.vehicleTypes
+        );
+
+    const taxEntries =
+        entries.map(
+            function ([vehicleType, count]) {
+
+                const rate =
+                    TOLL_RATES[
+                        vehicleType
+                    ].single;
+
+                return [
+                    vehicleType,
+                    Number(count) *
+                    rate
+                ];
+            }
+        );
+
+    const max =
+        Math.max(
+            ...taxEntries.map(
+                ([, value]) =>
+                    value
+            )
+        );
+
+    let html = "";
+
+    taxEntries.forEach(
+        function ([vehicleType, tax]) {
+
+            const percentage =
+                max > 0
+                    ? (
+                        tax /
+                        max
+                    ) * 100
+                    : 0;
+
+            html += `
+                <div class="bar-row">
+
+                    <div class="bar-label">
+                        ${escapeHtml(vehicleType)}
+                    </div>
+
+                    <div class="bar-track">
+
+                        <div
+                            class="bar-fill"
+                            style="width:${percentage}%"
+                        ></div>
+
+                    </div>
+
+                    <div class="bar-value">
+                        ${formatCurrency(tax)}
+                    </div>
+
+                </div>
+            `;
+        }
+    );
+
+    elements.taxChart.innerHTML =
+        html;
+}
+
+
+/* ===============================================================
+   TOLL PASSAGE HISTORY
+================================================================ */
+
+const PASSAGE_DATA = [
+
+    {
+        time: "08:41:22",
+        vehicle: "TS02ER8769",
+        type: "Light Commercial Vehicle (LCV)",
+        plaza: "Renikunta",
+        journey: "Single Journey",
+        fee: 143
+    },
+
+    {
+        time: "08:43:18",
+        vehicle: "TS02EZ1234",
+        type: "Car / Jeep / Van",
+        plaza: "Renikunta",
+        journey: "Monthly Pass",
+        fee: 405
+    },
+
+    {
+        time: "08:48:05",
+        vehicle: "TS08AB1234",
+        type: "Bus / Truck",
+        plaza: "Renikunta",
+        journey: "Single Journey",
+        fee: 286
+    },
+
+    {
+        time: "08:51:41",
+        vehicle: "TS09CD7788",
+        type: "Upto 3 Axle Vehicle",
+        plaza: "Renikunta",
+        journey: "Single Journey",
+        fee: 716
+    },
+
+    {
+        time: "09:02:13",
+        vehicle: "TS10EF4521",
+        type: "Car / Jeep / Van",
+        plaza: "Renikunta",
+        journey: "Single Journey",
+        fee: 72
+    },
+
+    {
+        time: "09:08:47",
+        vehicle: "TS11GH8812",
+        type: "Light Commercial Vehicle (LCV)",
+        plaza: "Renikunta",
+        journey: "Single Journey",
+        fee: 143
+    },
+
+    {
+        time: "09:14:32",
+        vehicle: "TS12JK9087",
+        type: "4 to 6 Axle Vehicle",
+        plaza: "Renikunta",
+        journey: "Single Journey",
+        fee: 716
+    },
+
+    {
+        time: "09:21:10",
+        vehicle: "TS13LM3388",
+        type: "Car / Jeep / Van",
+        plaza: "Renikunta",
+        journey: "Monthly Pass",
+        fee: 405
+    }
+];
+
+
+function renderPassageHistory() {
+
+    const plaza =
+        getCurrentPlaza();
+
+    const isRenikunta =
+        elements.tollPlaza.value ===
+        "renikunta";
+
+    const visibleRows =
+        isRenikunta
+            ? PASSAGE_DATA
+            : PASSAGE_DATA.map(
+                function (item) {
+
+                    return {
+                        ...item,
+                        plaza: "HKR Roadways"
+                    };
+
+                }
+            );
+
+
+    let html = "";
+
+    visibleRows.forEach(
+        function (item) {
+
+            const monthly =
+                item.journey ===
+                "Monthly Pass";
+
+            html += `
+                <tr>
+
+                    <td>
+                        ${item.time}
+                    </td>
+
+                    <td class="vehicle-type-cell">
+                        ${escapeHtml(item.vehicle)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.type)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.plaza)}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="status-badge ${
+                                monthly
+                                    ? "monthly"
+                                    : "single"
+                            }"
+                        >
+                            ${
+                                monthly
+                                    ? "Monthly Pass"
+                                    : "Single Journey"
+                            }
+                        </span>
+
+                    </td>
+
+                    <td class="money">
+                        ${formatCurrency(item.fee)}
+                    </td>
+
+                </tr>
+            `;
+        }
+    );
+
+    elements.passageHistoryBody.innerHTML =
+        html;
+}
+
+
+/* ===============================================================
+   DASHBOARD RENDER
+================================================================ */
+
+function renderDashboard() {
+
+    renderSummary();
+
+    renderVehicleStatistics();
+
+    renderVehicleChart();
+
+    renderTaxChart();
+
+    renderPassageHistory();
+}
+
+
+/* ===============================================================
+   HISTORY DEMO DATA
+================================================================ */
+
+const HISTORY_DEMO = {
+
+    TS02ER8769: {
+
+        vehicleType: "NORMAL",
+
+        rows: [
+
+            {
+                lat: 18.4327886,
+                lon: 79.1250964,
+                speed: 42.3,
+                heading: 181,
+                accuracy: 5.2,
+                time: "2026-10-06 08:41:22"
+            },
+
+            {
+                lat: 18.4328012,
+                lon: 79.1251147,
+                speed: 43.1,
+                heading: 180,
+                accuracy: 4.8,
+                time: "2026-10-06 08:42:18"
+            },
+
+            {
+                lat: 18.4328201,
+                lon: 79.1251329,
+                speed: 44.2,
+                heading: 179,
+                accuracy: 4.6,
+                time: "2026-10-06 08:43:18"
+            },
+
+            {
+                lat: 18.4328415,
+                lon: 79.1251502,
+                speed: 41.8,
+                heading: 178,
+                accuracy: 5.1,
+                time: "2026-10-06 08:44:10"
+            },
+
+            {
+                lat: 18.4328652,
+                lon: 79.1251688,
+                speed: 39.7,
+                heading: 177,
+                accuracy: 5.4,
+                time: "2026-10-06 08:45:03"
+            }
+        ]
+    },
+
+
+    TS02EZ1234: {
+
+        vehicleType: "NORMAL",
+
+        rows: [
+
+            {
+                lat: 18.4329258,
+                lon: 79.1250915,
+                speed: 38.7,
+                heading: 2,
+                accuracy: 5.1,
+                time: "2026-10-06 08:43:04"
+            },
+
+            {
+                lat: 18.4329102,
+                lon: 79.1250874,
+                speed: 40.2,
+                heading: 4,
+                accuracy: 5.0,
+                time: "2026-10-06 08:44:01"
+            },
+
+            {
+                lat: 18.4328944,
+                lon: 79.1250822,
+                speed: 41.6,
+                heading: 5,
+                accuracy: 5.2,
+                time: "2026-10-06 08:45:07"
+            },
+
+            {
+                lat: 18.4328778,
+                lon: 79.1250781,
+                speed: 42.4,
+                heading: 7,
+                accuracy: 4.9,
+                time: "2026-10-06 08:46:12"
+            }
+        ]
+    },
+
+
+    VEHICLE_001: {
+
+        vehicleType: "NORMAL",
+
+        rows: [
+
+            {
+                lat: 18.445167,
+                lon: 79.131954,
+                speed: 54.5,
+                heading: 180,
+                accuracy: 4.2,
+                time: "2026-10-04 19:30:00"
+            },
+
+            {
+                lat: 18.445110,
+                lon: 79.131910,
+                speed: 51.2,
+                heading: 178,
+                accuracy: 4.7,
+                time: "2026-10-04 19:31:00"
+            },
+
+            {
+                lat: 18.445060,
+                lon: 79.131860,
+                speed: 48.4,
+                heading: 177,
+                accuracy: 5.0,
+                time: "2026-10-04 19:32:00"
+            }
+        ]
+    }
+};
+
+
+/* ===============================================================
+   LOAD VEHICLE HISTORY
+================================================================ */
+
+function loadVehicleHistory() {
+
+    const vehicleId =
+        elements.historyVehicle.value;
+
+    if (!vehicleId) {
+
+        alert(
+            "Please select a vehicle."
+        );
+
+        return;
+    }
+
+
+    const requestedRecords =
+        Number(
+            elements.historyRecords.value
+        );
+
+
+    const demo =
+        HISTORY_DEMO[
+            vehicleId
+        ];
+
+
+    if (!demo) {
+
+        elements.historyEmpty.style.display =
+            "flex";
+
+        elements.historyEmpty.textContent =
+            "No demo history available for this vehicle.";
+
+        elements.historyTable.classList.remove(
+            "visible"
+        );
+
+        return;
+    }
+
+
+    const rows =
+        demo.rows.slice(
+            0,
+            Math.min(
+                requestedRecords,
+                demo.rows.length
+            )
+        );
+
+
+    let html = "";
+
+
+    rows.forEach(
+        function (row) {
+
+            html += `
+                <tr>
+
+                    <td class="vehicle-type-cell">
+                        ${escapeHtml(vehicleId)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(demo.vehicleType)}
+                    </td>
+
+                    <td>
+                        ${row.lat.toFixed(7)}
+                    </td>
+
+                    <td>
+                        ${row.lon.toFixed(7)}
+                    </td>
+
+                    <td>
+                        ${row.speed.toFixed(1)} km/h
+                    </td>
+
+                    <td>
+                        ${row.heading}°
+                    </td>
+
+                    <td>
+                        ${row.accuracy.toFixed(1)} m
+                    </td>
+
+                    <td>
+                        ${escapeHtml(row.time)}
+                    </td>
+
+                </tr>
+            `;
+        }
+    );
+
+
+    elements.historyTableBody.innerHTML =
+        html;
+
+    elements.historyEmpty.style.display =
+        "none";
+
+    elements.historyTable.classList.add(
+        "visible"
+    );
+}
+
+
+/* ===============================================================
+   CLEAR VEHICLE HISTORY
+================================================================ */
+
+function clearVehicleHistory() {
+
+    elements.historyVehicle.value =
+        "";
+
+    elements.historyTableBody.innerHTML =
+        "";
+
+    elements.historyTable.classList.remove(
+        "visible"
+    );
+
+    elements.historyEmpty.style.display =
+        "flex";
+
+    elements.historyEmpty.textContent =
+        'Select a vehicle and click "Load History".';
+}
+
+
+/* ===============================================================
+   EVENT LISTENERS
+================================================================ */
+
+elements.tollPlaza.addEventListener(
+    "change",
+    renderDashboard
+);
+
+
+elements.reportPeriod.addEventListener(
+    "change",
+    function () {
+
+        updatePeriodFields();
+
+        renderDashboard();
+
+    }
+);
+
+
+elements.reportDate.addEventListener(
+    "change",
+    renderDashboard
+);
+
+
+elements.reportMonth.addEventListener(
+    "change",
+    renderDashboard
+);
+
+
+elements.reportYear.addEventListener(
+    "change",
+    renderDashboard
+);
+
+
+elements.loadHistoryButton.addEventListener(
+    "click",
+    loadVehicleHistory
+);
+
+
+elements.clearHistoryButton.addEventListener(
+    "click",
+    clearVehicleHistory
+);
+
+
+/* ===============================================================
+   INITIALIZATION
+================================================================ */
+
+function initialize() {
+
+    updatePeriodFields();
+
+    renderDashboard();
+
+    clearVehicleHistory();
+
+}
+
+
+/* ===============================================================
+   START
+================================================================ */
+
+initialize();
+
+</script>
+
+</body>
+</html>

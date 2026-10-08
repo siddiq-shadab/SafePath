@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="SafePath Traffic Fine"
+    >
+
+    <title>SafePath - Traffic Fine</title>
+
+
+    <!-- =====================================================
+         LEAFLET
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        crossorigin=""
+    >
+
+
+    <!-- =====================================================
+         SAFEPATH COMMON CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+
+    <!-- =====================================================
+         TRAFFIC FINE CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/fine.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         NAVIGATION OVERLAY
+    ====================================================== -->
+
+    <div
+        id="navigationOverlay"
+        class="fine-navigation-overlay"
+    ></div>
+
+
+    <!-- =====================================================
+         NAVIGATION DRAWER
+    ====================================================== -->
+
+    <aside
+        id="navigationDrawer"
+        class="fine-navigation-drawer"
+    >
+
+        <div class="fine-drawer-header">
+
+            <div class="fine-drawer-title">
+                SafePath
+            </div>
+
+
+            <button
+                id="drawerClose"
+                class="fine-drawer-close"
+                type="button"
+                aria-label="Close navigation"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <nav class="fine-drawer-navigation">
+
+            <a href="./Overview.html">
+                Overview
+            </a>
+
+            <a href="./vehicles.html">
+                Vehicles
+            </a>
+
+            <a href="./livemap.html">
+                Live Map
+            </a>
+
+            <a href="./alerts.html">
+                Alerts
+            </a>
+
+            <a href="./events.html">
+                Events
+            </a>
+
+            <a href="./history.html">
+                History
+            </a>
+
+            <a
+                href="./fine.html"
+                class="active"
+            >
+                Traffic Fine
+            </a>
+
+            <a href="./toll.html">
+                Toll Tax
+            </a>
+
+            <a href="./insurance.html">
+                Insurance and Pollution
+            </a>
+
+            <a href="./stolen.html">
+                Search Stolen Vehicle
+            </a>
+
+            <a href="./monitor.html">
+    Monitor
+</a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="fine-header">
+
+        <div class="fine-header-left">
+
+            <button
+                id="menuButton"
+                class="fine-menu-button"
+                type="button"
+                aria-label="Open navigation"
+                aria-expanded="false"
+            >
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
+
+
+            <div class="fine-brand">
+
+                <img
+                    src="../asset/logo.png"
+                    alt="SafePath"
+                    class="fine-logo"
+                >
+
+
+                <div class="fine-brand-text">
+
+                    <div class="fine-brand-title">
+                        SafePath
+                    </div>
+
+                    <div class="fine-brand-subtitle">
+                        Traffic Fine
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="fine-header-right">
+
+            <span
+                id="connectionIndicator"
+                class="fine-connection-dot disconnected"
+            ></span>
+
+
+            <span
+                id="connectionText"
+                class="fine-connection-text"
+            >
+                Disconnected
+            </span>
+
+
+            <button
+                id="refreshButton"
+                class="fine-refresh-button"
+                type="button"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAP AREA
+    ====================================================== -->
+
+    <main class="fine-main">
+
+        <div
+            id="fineMap"
+            class="fine-map"
+        ></div>
+
+    </main>
+
+
+    <!-- =====================================================
+         SMALL START BUTTON
+    ====================================================== -->
+
+    <button
+        id="fineStartButton"
+        class="fine-start-button"
+        type="button"
+    >
+        .
+    </button>
+
+
+    <!-- =====================================================
+         WRONG DIRECTION POPUP
+    ====================================================== -->
+
+    <div
+        id="fineAlertOverlay"
+        class="fine-alert-overlay"
+        aria-hidden="true"
+    >
+
+        <div
+            class="fine-alert-modal"
+            role="dialog"
+            aria-modal="true"
+        >
+
+
+            <div class="fine-alert-top">
+
+                <div>
+
+                    <div class="fine-alert-label">
+                        SafePath Traffic Safety Alert
+                    </div>
+
+
+                    <h2>
+                        Wrong Direction Detected
+                    </h2>
+
+                </div>
+
+
+                <div class="fine-alert-icon">
+                    !
+                </div>
+
+            </div>
+
+
+            <div class="fine-alert-message">
+
+                <strong>
+                    You are going in the wrong direction.
+                    Turn around and start moving in the correct direction.
+                </strong>
+
+            </div>
+
+
+            <div class="fine-alert-details">
+
+
+                <div class="fine-alert-row">
+
+                    <span>
+                        Vehicle ID
+                    </span>
+
+                    <strong id="fineAlertVehicleId">
+                        --
+                    </strong>
+
+                </div>
+
+
+                <div class="fine-alert-row">
+
+                    <span>
+                        Direction
+                    </span>
+
+                    <strong id="fineAlertDirection">
+                        Backward
+                    </strong>
+
+                </div>
+
+
+                <div class="fine-alert-row">
+
+                    <span>
+                        Status
+                    </span>
+
+                    <strong id="fineAlertStatus">
+                        Fine Issued
+                    </strong>
+
+                </div>
+
+
+                <div class="fine-alert-row fine-alert-fine">
+
+                    <span>
+                        Fine
+                    </span>
+
+                    <strong id="fineAlertFine">
+                        ₹100
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="fine-issued">
+
+                <div class="fine-issued-title">
+                    Traffic Fine Issued
+                </div>
+
+
+                <div class="fine-issued-amount">
+                    ₹100
+                </div>
+
+
+                <div class="fine-issued-reason">
+                    Wrong direction driving violation
+                </div>
+
+            </div>
+
+
+            <button
+                id="fineAlertCloseButton"
+                class="fine-close-button"
+                type="button"
+            >
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SOCKET.IO
+    ====================================================== -->
+
+    <script src="../js/socket.io.min.js"></script>
+
+
+    <!-- =====================================================
+         LEAFLET
+    ====================================================== -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        crossorigin=""
+    ></script>
+
+
+    <!-- =====================================================
+         SHARED WEBSOCKET
+    ====================================================== -->
+
+    <script src="../js/websocket.js"></script>
+
+
+    <!-- =====================================================
+         TRAFFIC FINE
+    ====================================================== -->
+
+    <script src="../js/fine.js"></script>
+
+
+</body>
+
+</html>

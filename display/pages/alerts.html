@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="SafePath Fleet Alerts and Emergency Alert Engine"
+  />
+
+  <title>SafePath - Alerts</title>
+
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- SafePath Alerts -->
+  <link
+    rel="stylesheet"
+    href="../css/alerts.css"
+  />
+</head>
+
+<body>
+
+  <!-- =====================================================
+       NAVIGATION OVERLAY
+  ====================================================== -->
+
+  <div
+    id="navigationOverlay"
+    class="navigation-overlay"
+  ></div>
+
+
+  <!-- =====================================================
+       NAVIGATION DRAWER
+  ====================================================== -->
+
+  <aside
+    id="navigationDrawer"
+    class="navigation-drawer"
+    aria-hidden="true"
+  >
+
+    <div class="drawer-header">
+
+      <div class="drawer-title">
+
+        <strong>
+          SafePath
+        </strong>
+
+        <span>
+          Fleet Control
+        </span>
+
+      </div>
+
+
+      <button
+        id="drawerClose"
+        class="drawer-close"
+        type="button"
+        aria-label="Close navigation"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <nav
+      class="drawer-navigation"
+      aria-label="Main navigation"
+    >
+
+      <a href="./Overview.html">
+        Overview
+      </a>
+
+      <a href="./vehicles.html">
+        Vehicles
+      </a>
+
+      <a href="./livemap.html">
+        Live Map
+      </a>
+
+      <a
+        href="./alerts.html"
+        class="active"
+        aria-current="page"
+      >
+        Alerts
+      </a>
+
+      <a href="./events.html">
+        Events
+      </a>
+
+      <a href="./history.html">
+        History
+      </a>
+
+      <a href="./fine.html">
+        Traffic Fine
+      </a>
+
+      <a href="./toll.html">
+        Toll Tax
+      </a>
+
+      <a href="./insurance.html">
+        Insurance and Pollution
+      </a>
+
+      <a href="./stolen.html">
+        Search Stolen Vehicle
+      </a>
+
+      <a href="./monitor.html">
+        Monitor
+      </a>
+
+    </nav>
+
+  </aside>
+
+
+  <!-- =====================================================
+       PAGE
+  ====================================================== -->
+
+  <div class="page">
+
+
+    <!-- ===================================================
+         HEADER
+    ==================================================== -->
+
+    <header class="page-header">
+
+      <div class="header-left">
+
+        <button
+          id="menuButton"
+          class="menu-button"
+          type="button"
+          aria-label="Open navigation"
+          aria-controls="navigationDrawer"
+          aria-expanded="false"
+        >
+
+          <span></span>
+          <span></span>
+          <span></span>
+
+        </button>
+
+
+        <div class="page-heading">
+
+          <h1>
+            Alerts
+          </h1>
+
+          <p>
+            SafePath Fleet Alerts
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="header-right">
+
+        <!-- Backend / alert connection -->
+        <div
+          id="connectionStatus"
+          class="connection-status checking"
+          role="status"
+          aria-live="polite"
+        >
+
+          <span
+            class="status-dot"
+            aria-hidden="true"
+          ></span>
+
+          <span id="connectionText">
+            Connecting...
+          </span>
+
+        </div>
+
+
+        <!-- Refresh -->
+        <button
+          id="refreshButton"
+          class="refresh-button"
+          type="button"
+        >
+          Refresh
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- ===================================================
+         MAIN CONTENT
+    ==================================================== -->
+
+    <main class="main-content">
+
+
+      <!-- =================================================
+           ALERT SUMMARY
+      ================================================== -->
+
+      <section
+        class="summary-grid"
+        aria-label="Alert summary"
+      >
+
+
+        <!-- TOTAL ALERTS -->
+
+        <div class="summary-card">
+
+          <div
+            class="summary-icon neutral"
+            aria-hidden="true"
+          >
+            !
+          </div>
+
+          <div>
+
+            <span class="summary-label">
+              TOTAL ALERTS
+            </span>
+
+            <strong id="totalAlerts">
+              0
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- CRITICAL -->
+
+        <div class="summary-card">
+
+          <div
+            class="summary-icon critical"
+            aria-hidden="true"
+          >
+            !
+          </div>
+
+          <div>
+
+            <span class="summary-label">
+              CRITICAL
+            </span>
+
+            <strong id="criticalAlerts">
+              0
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- WARNING -->
+
+        <div class="summary-card">
+
+          <div
+            class="summary-icon warning"
+            aria-hidden="true"
+          >
+            !
+          </div>
+
+          <div>
+
+            <span class="summary-label">
+              WARNING
+            </span>
+
+            <strong id="warningAlerts">
+              0
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- INFORMATION -->
+
+        <div class="summary-card">
+
+          <div
+            class="summary-icon info"
+            aria-hidden="true"
+          >
+            i
+          </div>
+
+          <div>
+
+            <span class="summary-label">
+              INFORMATION
+            </span>
+
+            <strong id="infoAlerts">
+              0
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           ALERT ENGINE
+      ================================================== -->
+
+      <section
+        class="engine-status"
+        aria-label="Alert Engine status"
+      >
+
+        <div class="engine-status-left">
+
+          <div
+            id="engineIndicator"
+            class="engine-indicator inactive"
+            aria-hidden="true"
+          ></div>
+
+
+          <div>
+
+            <h2>
+              Alert Engine
+            </h2>
+
+            <p id="engineDescription">
+              No alert engine is currently active.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="engineState"
+          class="engine-state inactive"
+        >
+          Not Active
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           ACTIVE ALERTS
+      ================================================== -->
+
+      <section
+        class="panel alerts-panel"
+        aria-labelledby="activeAlertsHeading"
+      >
+
+        <div class="panel-heading">
+
+          <div>
+
+            <h2 id="activeAlertsHeading">
+              Active Alerts
+            </h2>
+
+            <p>
+              Safety alerts received from the SafePath backend.
+            </p>
+
+          </div>
+
+
+          <div
+            id="alertCountBadge"
+            class="alert-count-badge"
+          >
+            0 alerts
+          </div>
+
+        </div>
+
+
+        <!-- ===============================================
+             ERROR MESSAGE
+        ================================================ -->
+
+        <div
+          id="alertError"
+          class="error-message hidden"
+          role="alert"
+          aria-live="assertive"
+        >
+
+          <strong id="errorTitle">
+            Unable to load alerts.
+          </strong>
+
+          <span id="errorText"></span>
+
+        </div>
+
+
+        <!-- ===============================================
+             EMPTY STATE
+        ================================================ -->
+
+        <div
+          id="emptyAlertState"
+          class="empty-alert-state"
+        >
+
+          <div
+            class="empty-alert-icon"
+            aria-hidden="true"
+          >
+            ✓
+          </div>
+
+          <h3>
+            No Active Alerts
+          </h3>
+
+          <p>
+            There are currently no alerts available from the
+            SafePath alert engine.
+          </p>
+
+        </div>
+
+
+        <!-- ===============================================
+             ALERT LIST
+
+             Alerts are inserted dynamically by alerts.js.
+        ================================================ -->
+
+        <div
+          id="alertList"
+          class="alert-list hidden"
+          aria-live="polite"
+        ></div>
+
+      </section>
+
+
+      <!-- =================================================
+           LIVE LOCATION MAP
+
+           The map is initialized by alerts.js.
+           It is displayed when the operator selects
+           "Active Alert".
+      ================================================== -->
+
+      <section
+        id="alertMapPanel"
+        class="panel alert-map-panel"
+        aria-labelledby="liveLocationHeading"
+      >
+
+        <div class="panel-heading">
+
+          <div>
+
+            <h2 id="liveLocationHeading">
+              Live Location
+            </h2>
+
+            <p id="alertMapDescription">
+              Select an Active Alert to show the vehicle location.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="alert-map-wrapper">
+
+          <div
+            class="map-overlay-header"
+            aria-hidden="true"
+          >
+            Active Alert Vehicle
+          </div>
+
+
+          <div
+            id="alertMap"
+            class="map-hidden"
+          ></div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           ALERT SYSTEM
+      ================================================== -->
+
+      <section
+        class="panel system-panel"
+        aria-labelledby="alertSystemHeading"
+      >
+
+        <div class="panel-heading">
+
+          <div>
+
+            <h2 id="alertSystemHeading">
+              Alert System
+            </h2>
+
+            <p>
+              Current alert infrastructure status.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="system-grid">
+
+
+          <!-- BACKEND -->
+
+          <div class="system-row">
+
+            <span>
+              Backend
+            </span>
+
+            <strong
+              id="backendState"
+            >
+              Checking...
+            </strong>
+
+          </div>
+
+
+          <!-- SOCKET.IO -->
+
+          <div class="system-row">
+
+            <span>
+              Socket.IO
+            </span>
+
+            <strong
+              id="socketState"
+            >
+              Checking...
+            </strong>
+
+          </div>
+
+
+          <!-- ALERT API -->
+
+          <div class="system-row">
+
+            <span>
+              Alert API
+            </span>
+
+            <strong
+              id="alertApiState"
+              class="not-configured"
+            >
+              Not configured
+            </strong>
+
+          </div>
+
+
+          <!-- ALERT DATABASE -->
+
+          <div class="system-row">
+
+            <span>
+              Alert Database
+            </span>
+
+            <strong
+              id="alertDatabaseState"
+              class="not-configured"
+            >
+              Not configured
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- =====================================================
+       SOCKET.IO CLIENT
+  ====================================================== -->
+
+  <script src="../js/socket.io.min.js"></script>
+
+
+  <!-- =====================================================
+       LEAFLET
+  ====================================================== -->
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
+
+
+  <!-- =====================================================
+       SAFEPATH ALERT LOGIC
+  ====================================================== -->
+
+  <script src="../js/alerts.js"></script>
+
+</body>
+</html>

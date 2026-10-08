@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>SafePath - Vehicle Events</title>
+
+  <link
+    rel="icon"
+    type="image/x-icon"
+    href="../asset/favicon.ico"
+  />
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/events.css"
+  />
+</head>
+
+<body class="events-page">
+
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <header class="events-header">
+
+    <button
+      id="menuButton"
+      class="menu-button"
+      type="button"
+      aria-label="Open navigation"
+      title="Open navigation"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="header-title">
+
+      <h1>Vehicle Events</h1>
+
+      <p id="headerVehicleId">
+        SafePath Vehicle
+      </p>
+
+    </div>
+
+    <div class="header-actions">
+
+      <div
+        id="connectionStatus"
+        class="connection-status disconnected"
+      >
+        <span class="connection-dot"></span>
+        <span id="connectionText">
+          Disconnected
+        </span>
+      </div>
+
+      <button
+        id="backButton"
+        class="back-button"
+        type="button"
+      >
+        Vehicles
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       NAVIGATION DRAWER
+  ========================== -->
+
+  <aside
+    id="navigationDrawer"
+    class="navigation-drawer"
+    aria-hidden="true"
+  >
+
+    <div class="drawer-header">
+
+      <div class="drawer-title">
+
+        <strong>SafePath</strong>
+
+        <span>
+          Control Center
+        </span>
+
+      </div>
+
+      <button
+        id="closeDrawerButton"
+        class="drawer-close-button"
+        type="button"
+        aria-label="Close navigation"
+        title="Close navigation"
+      >
+        &times;
+      </button>
+
+    </div>
+
+
+    <nav class="drawer-navigation">
+
+      <a href="./Overview.html">
+  Overview
+</a>
+
+      <a href="./vehicles.html">
+        Vehicles
+      </a>
+
+      <a href="./livemap.html">
+        Live Map
+      </a>
+
+      <a href="./alerts.html">
+        Alerts
+      </a>
+
+      <a
+        href="./events.html"
+        class="active"
+      >
+        Events
+      </a>
+
+      <a href="./history.html">
+        History
+      </a>
+<a href="fine.html">
+    Traffic Fine
+</a>
+
+<a href="toll.html">
+    Toll Tax
+</a>
+
+<a href="insurance.html">
+    Insurance and Pollution
+</a>
+<a href="stolen.html">
+  Search Stolen Vehicle
+</a>
+
+<a href="./monitor.html">
+    Monitor
+</a>
+
+    </nav>
+
+  </aside>
+
+
+  <div
+    id="drawerOverlay"
+    class="drawer-overlay"
+  ></div>
+
+
+  <!-- =========================
+       MAIN
+  ========================== -->
+
+  <main class="events-main">
+
+    <!-- =========================
+         VEHICLE INFORMATION
+    ========================== -->
+
+    <section class="vehicle-information">
+
+      <div class="vehicle-heading">
+
+        <div class="vehicle-icon">
+          🚗
+        </div>
+
+        <div>
+
+          <span class="vehicle-label">
+            Vehicle
+          </span>
+
+          <h2 id="vehicleId">
+            —
+          </h2>
+
+          <div class="vehicle-type-line">
+
+            <span>
+              Type:
+            </span>
+
+            <strong id="vehicleType">
+              —
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="vehicle-status-area">
+
+        <span
+          id="vehicleStatus"
+          class="vehicle-status offline"
+        >
+          <span class="status-dot"></span>
+          Offline
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         TELEMETRY
+    ========================== -->
+
+    <section class="telemetry-grid">
+
+      <div class="telemetry-card">
+
+        <span class="telemetry-label">
+          Speed
+        </span>
+
+        <strong id="speed">
+          —
+        </strong>
+
+      </div>
+
+
+      <div class="telemetry-card">
+
+        <span class="telemetry-label">
+          Heading
+        </span>
+
+        <strong id="heading">
+          —
+        </strong>
+
+      </div>
+
+
+      <div class="telemetry-card">
+
+        <span class="telemetry-label">
+          Accuracy
+        </span>
+
+        <strong id="accuracy">
+          —
+        </strong>
+
+      </div>
+
+
+      <div class="telemetry-card">
+
+        <span class="telemetry-label">
+          Last Online
+        </span>
+
+        <strong id="lastOnline">
+          —
+        </strong>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         MAP + LOCATION
+    ========================== -->
+
+    <section class="location-section">
+
+      <div class="section-header">
+
+        <div>
+
+          <h2>
+            Live Location
+          </h2>
+
+          <p>
+            Current location of the selected vehicle.
+          </p>
+
+        </div>
+
+        <div
+          id="mapStatus"
+          class="map-status"
+        >
+          Waiting for location
+        </div>
+
+      </div>
+
+
+      <div
+        id="vehicleMap"
+        class="vehicle-map"
+      ></div>
+
+
+      <div class="coordinates-panel">
+
+        <div class="coordinate-item">
+
+          <span>
+            Latitude
+          </span>
+
+          <strong id="latitude">
+            —
+          </strong>
+
+        </div>
+
+
+        <div class="coordinate-item">
+
+          <span>
+            Longitude
+          </span>
+
+          <strong id="longitude">
+            —
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         ERROR
+    ========================== -->
+
+    <section
+      id="errorPanel"
+      class="error-panel"
+      hidden
+    >
+
+      <strong>
+        Unable to load vehicle.
+      </strong>
+
+      <span id="errorText"></span>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       SCRIPTS
+  ========================== -->
+
+  <script src="../js/socket.io.min.js"></script>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
+
+  <script src="../js/websocket.js"></script>
+
+  <script src="../js/events.js"></script>
+
+</body>
+</html>

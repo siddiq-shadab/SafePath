@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>SafePath - Vehicles</title>
+
+  <link
+    rel="icon"
+    type="image/x-icon"
+    href="../asset/favicon.ico"
+  />
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="../css/vehicles.css"
+  />
+</head>
+
+<body class="vehicles-page">
+
+  <!-- =========================
+       HEADER
+  ========================== -->
+  <header class="vehicles-header">
+
+    <button
+      id="menuButton"
+      class="menu-button"
+      type="button"
+      aria-label="Open navigation"
+      title="Open navigation"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="header-title">
+      <h1>Vehicles</h1>
+      <p>SafePath Fleet</p>
+    </div>
+
+    <div class="header-actions">
+
+      <div
+        id="connectionStatus"
+        class="connection-status disconnected"
+      >
+        <span class="connection-dot"></span>
+        <span id="connectionText">Disconnected</span>
+      </div>
+
+      <button
+        id="refreshButton"
+        class="refresh-button"
+        type="button"
+      >
+        Refresh
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       NAVIGATION DRAWER
+  ========================== -->
+  <aside
+    id="navigationDrawer"
+    class="navigation-drawer"
+    aria-hidden="true"
+  >
+
+    <div class="drawer-header">
+
+      <div class="drawer-title">
+        <strong>SafePath</strong>
+        <span>Control Center</span>
+      </div>
+
+      <button
+        id="closeDrawerButton"
+        class="drawer-close-button"
+        type="button"
+        aria-label="Close navigation"
+        title="Close navigation"
+      >
+        &times;
+      </button>
+
+    </div>
+
+    <nav class="drawer-navigation">
+
+      <a href="./Overview.html">
+  Overview
+</a>
+
+      <a
+        href="./vehicles.html"
+        class="active"
+      >
+        Vehicles
+      </a>
+
+      <a href="./livemap.html">
+        Live Map
+      </a>
+
+      <a href="./alerts.html">
+        Alerts
+      </a>
+
+      <a href="./events.html">
+        Events
+      </a>
+
+      <a href="./history.html">
+        History
+      </a>
+<a href="fine.html">
+    Traffic Fine
+</a>
+
+<a href="toll.html">
+    Toll Tax
+</a>
+
+<a href="insurance.html">
+    Insurance and Pollution
+</a>
+
+<a href="stolen.html">
+  Search Stolen Vehicle
+</a>
+
+<a href="./monitor.html">
+    Monitor
+</a>
+
+    </nav>
+
+  </aside>
+
+
+  <div
+    id="drawerOverlay"
+    class="drawer-overlay"
+  ></div>
+
+
+  <!-- =========================
+       MAIN CONTENT
+  ========================== -->
+  <main class="vehicles-main">
+
+    <!-- Fleet summary -->
+    <section class="fleet-summary">
+
+      <div class="summary-card">
+
+        <span class="summary-label">
+          Total Vehicles
+        </span>
+
+        <strong
+          id="totalVehicles"
+          class="summary-value"
+        >
+          0
+        </strong>
+
+      </div>
+
+
+      <div class="summary-card online">
+
+        <span class="summary-label">
+          Online
+        </span>
+
+        <strong
+          id="onlineVehicles"
+          class="summary-value"
+        >
+          0
+        </strong>
+
+      </div>
+
+
+      <div class="summary-card offline">
+
+        <span class="summary-label">
+          Offline
+        </span>
+
+        <strong
+          id="offlineVehicles"
+          class="summary-value"
+        >
+          0
+        </strong>
+
+      </div>
+
+
+      <div class="summary-card">
+
+        <span class="summary-label">
+          Last Updated
+        </span>
+
+        <strong
+          id="lastUpdated"
+          class="summary-value summary-time"
+        >
+          —
+        </strong>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         VEHICLE TABLE
+    ========================== -->
+    <section class="vehicles-panel">
+
+      <div class="panel-header">
+
+        <div>
+
+          <h2>
+            Fleet Vehicles
+          </h2>
+
+          <p>
+            Live vehicle telemetry received from SafePath backend.
+          </p>
+
+        </div>
+
+        <div
+          id="loadingIndicator"
+          class="loading-indicator"
+          aria-hidden="true"
+        >
+          Loading...
+        </div>
+
+      </div>
+
+
+      <!-- Error -->
+      <div
+        id="errorMessage"
+        class="error-message"
+        hidden
+      >
+
+        <strong>
+          Unable to load vehicles.
+        </strong>
+
+        <span id="errorText"></span>
+
+      </div>
+
+
+      <!-- Empty state -->
+      <div
+        id="emptyState"
+        class="empty-state"
+        hidden
+      >
+
+        <div class="empty-icon">
+          🚗
+        </div>
+
+        <h3>
+          No Vehicles
+        </h3>
+
+        <p>
+          No vehicle telemetry has been received from the backend yet.
+        </p>
+
+      </div>
+
+
+      <!-- Table -->
+      <div class="table-wrapper">
+
+        <table
+          id="vehiclesTable"
+          class="vehicles-table"
+        >
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Vehicle ID
+              </th>
+
+              <th>
+                Vehicle Type
+              </th>
+
+              <th>
+                Latitude
+              </th>
+
+              <th>
+                Longitude
+              </th>
+
+              <th>
+                Speed
+              </th>
+
+              <th>
+                Heading
+              </th>
+
+              <th>
+                Accuracy
+              </th>
+
+              <th>
+                Last Online
+              </th>
+
+              <th>
+                Status
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="vehiclesTableBody">
+            <!-- Rows inserted by vehicles.js -->
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       SCRIPTS
+  ========================== -->
+
+  <script src="../js/socket.io.min.js"></script>
+
+  <script src="../js/websocket.js"></script>
+
+  <script src="../js/vehicles.js"></script>
+
+</body>
+</html>

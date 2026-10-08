@@ -1,0 +1,3884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>SafePath - Insurance & Pollution</title>
+
+  <style>
+    /* =========================================================
+       SAFE PATH - INSURANCE & POLLUTION
+       ========================================================= */
+
+    :root {
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --surface-soft: #f8fafc;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
+
+      --text: #0f172a;
+      --text-soft: #64748b;
+      --text-muted: #94a3b8;
+
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-soft: #eff6ff;
+
+      --success: #16a34a;
+      --success-soft: #f0fdf4;
+
+      --warning: #d97706;
+      --warning-soft: #fffbeb;
+
+      --danger: #dc2626;
+      --danger-dark: #b91c1c;
+      --danger-soft: #fef2f2;
+
+      --purple: #7c3aed;
+      --purple-soft: #f5f3ff;
+
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow: 0 8px 30px rgba(15, 23, 42, 0.07);
+
+      --radius: 12px;
+      --radius-lg: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      min-height: 72px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 24px;
+
+      background: rgba(255, 255, 255, 0.97);
+      border-bottom: 1px solid var(--border);
+
+      backdrop-filter: blur(12px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .menu-button {
+      width: 42px;
+      height: 42px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      border: 1px solid var(--border);
+      border-radius: 10px;
+
+      background: var(--surface);
+      color: var(--text);
+
+      font-size: 22px;
+
+      transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .menu-button:hover {
+      background: var(--surface-soft);
+      border-color: var(--border-dark);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+
+      object-fit: contain;
+
+      border-radius: 9px;
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 750;
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      margin-top: 3px;
+
+      color: var(--text-soft);
+      font-size: 12px;
+    }
+
+    .connection-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 8px 12px;
+
+      border: 1px solid var(--border);
+      border-radius: 999px;
+
+      background: var(--surface-soft);
+
+      color: var(--text-soft);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .connection-dot {
+      width: 8px;
+      height: 8px;
+
+      border-radius: 50%;
+      background: var(--text-muted);
+    }
+
+    .connection-status.online .connection-dot {
+      background: var(--success);
+    }
+
+    /* =========================================================
+       DRAWER
+       ========================================================= */
+
+    .navigation-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+
+      display: none;
+
+      background: rgba(15, 23, 42, 0.42);
+      backdrop-filter: blur(2px);
+    }
+
+    .navigation-overlay.open {
+      display: block;
+    }
+
+    .navigation-drawer {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: min(330px, 88vw);
+      height: 100%;
+
+      display: flex;
+      flex-direction: column;
+
+      background: var(--surface);
+
+      box-shadow: 20px 0 50px rgba(15, 23, 42, 0.16);
+    }
+
+    .drawer-header {
+      min-height: 72px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 18px;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .drawer-title {
+      font-size: 17px;
+      font-weight: 750;
+    }
+
+    .close-menu-button {
+      width: 38px;
+      height: 38px;
+
+      border: 1px solid var(--border);
+      border-radius: 9px;
+
+      background: var(--surface);
+      color: var(--text);
+
+      font-size: 22px;
+    }
+
+    .drawer-navigation {
+      display: flex;
+      flex-direction: column;
+
+      padding: 14px;
+      gap: 4px;
+
+      overflow-y: auto;
+    }
+
+    .drawer-navigation a {
+      padding: 12px 14px;
+
+      border-radius: 9px;
+
+      color: var(--text-soft);
+
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .drawer-navigation a:hover {
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    .drawer-navigation a.active {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    .page-container {
+      width: min(1600px, calc(100% - 40px));
+
+      margin: 0 auto;
+      padding: 28px 0 60px;
+    }
+
+    .page-heading {
+      margin-bottom: 22px;
+    }
+
+    .page-heading h1 {
+      margin: 0;
+
+      font-size: 30px;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+    }
+
+    .page-heading p {
+      margin: 8px 0 0;
+
+      color: var(--text-soft);
+
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       SECTION
+       ========================================================= */
+
+    .section {
+      margin-bottom: 24px;
+
+      background: var(--surface);
+
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+
+      padding: 18px 20px;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      margin: 0;
+
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .section-description {
+      margin: 5px 0 0;
+
+      color: var(--text-soft);
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       TOP VEHICLE COMPLIANCE TABLE
+       ========================================================= */
+
+    .vehicle-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+
+      padding: 14px 20px;
+
+      background: var(--surface-soft);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .selection-summary {
+      color: var(--text-soft);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .selection-summary strong {
+      color: var(--text);
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .select-all-button,
+    .notification-button {
+      min-height: 38px;
+
+      padding: 8px 14px;
+
+      border-radius: 9px;
+
+      font-size: 13px;
+      font-weight: 700;
+
+      transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        opacity 0.2s ease;
+    }
+
+    .select-all-button {
+      border: 1px solid var(--border-dark);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .select-all-button:hover {
+      background: var(--surface-soft);
+    }
+
+    .notification-button {
+      border: 1px solid var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .notification-button:hover:not(:disabled) {
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+
+    .notification-button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .vehicle-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      min-width: 1120px;
+    }
+
+    .vehicle-table th {
+      padding: 13px 14px;
+
+      background: #f8fafc;
+
+      border-bottom: 1px solid var(--border);
+
+      color: var(--text-soft);
+
+      font-size: 11px;
+      font-weight: 800;
+      text-align: left;
+
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+
+      white-space: nowrap;
+    }
+
+    .vehicle-table td {
+      padding: 14px;
+
+      border-bottom: 1px solid var(--border);
+
+      font-size: 13px;
+      vertical-align: middle;
+
+      white-space: nowrap;
+    }
+
+    .vehicle-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .vehicle-table tbody tr:hover {
+      background: #fafcff;
+    }
+
+    .checkbox-cell {
+      width: 52px;
+      text-align: center;
+    }
+
+    .vehicle-checkbox,
+    #selectAllCheckbox {
+      width: 17px;
+      height: 17px;
+
+      accent-color: var(--primary);
+
+      cursor: pointer;
+    }
+
+    .vehicle-id {
+      font-weight: 750;
+      color: var(--text);
+    }
+
+    .vehicle-type {
+      color: var(--text-soft);
+    }
+
+    .insurance-company {
+      font-weight: 600;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      min-width: 76px;
+
+      padding: 5px 9px;
+
+      border-radius: 999px;
+
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .status-active,
+    .status-valid {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .status-missing,
+    .status-expired {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .status-expiring {
+      background: var(--warning-soft);
+      color: var(--warning);
+    }
+
+    .expiry-date {
+      color: var(--text-soft);
+    }
+
+    .notifiable-row {
+      background: #fffafa;
+    }
+
+    .compliant-row {
+      background: #ffffff;
+    }
+
+    .notifiable-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+
+      color: var(--danger);
+
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .notifiable-label::before {
+      content: "";
+
+      width: 6px;
+      height: 6px;
+
+      border-radius: 50%;
+      background: var(--danger);
+    }
+
+    .table-empty {
+      padding: 34px 20px !important;
+
+      color: var(--text-muted);
+
+      text-align: center !important;
+    }
+
+    /* =========================================================
+       MAIN INSURANCE/POLLUTION DASHBOARD
+       ========================================================= */
+
+    .content-padding {
+      padding: 20px;
+    }
+
+    .demo-label {
+      display: inline-flex;
+
+      margin-bottom: 18px;
+
+      padding: 6px 10px;
+
+      border-radius: 999px;
+
+      background: var(--purple-soft);
+      color: var(--purple);
+
+      font-size: 11px;
+      font-weight: 800;
+
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* =========================================================
+       LOCATION
+       ========================================================= */
+
+    .location-grid {
+      display: grid;
+
+      grid-template-columns:
+        minmax(180px, 1fr)
+        minmax(180px, 1fr)
+        auto;
+
+      gap: 14px;
+
+      margin-bottom: 14px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field-label {
+      color: var(--text-soft);
+
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .field-control {
+      width: 100%;
+      min-height: 42px;
+
+      padding: 9px 12px;
+
+      border: 1px solid var(--border-dark);
+      border-radius: 9px;
+
+      background: #ffffff;
+      color: var(--text);
+
+      outline: none;
+    }
+
+    .field-control:focus {
+      border-color: var(--primary);
+
+      box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+    }
+
+    .apply-button {
+      align-self: end;
+
+      min-height: 42px;
+
+      padding: 9px 18px;
+
+      border: 1px solid var(--primary);
+      border-radius: 9px;
+
+      background: var(--primary);
+      color: #ffffff;
+
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .apply-button:hover {
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+    }
+
+    .location-info {
+      margin-bottom: 22px;
+
+      padding: 12px 14px;
+
+      border: 1px solid #dbeafe;
+      border-radius: 9px;
+
+      background: var(--primary-soft);
+
+      color: #1e40af;
+
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       FILTERS
+       ========================================================= */
+
+    .filters-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, minmax(180px, 1fr));
+
+      gap: 14px;
+
+      margin-bottom: 14px;
+    }
+
+    .filter-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .clear-filters {
+      min-height: 38px;
+
+      padding: 8px 14px;
+
+      border: 1px solid var(--border-dark);
+      border-radius: 9px;
+
+      background: var(--surface);
+      color: var(--text-soft);
+
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .clear-filters:hover {
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    /* =========================================================
+       SUMMARY CARDS
+       ========================================================= */
+
+    .summary-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+      gap: 14px;
+
+      margin-top: 22px;
+    }
+
+    .summary-card {
+      padding: 18px;
+
+      border: 1px solid var(--border);
+      border-radius: 12px;
+
+      background: var(--surface);
+    }
+
+    .summary-card-label {
+      color: var(--text-soft);
+
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .summary-card-value {
+      margin-top: 7px;
+
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .summary-card-note {
+      margin-top: 5px;
+
+      color: var(--text-muted);
+
+      font-size: 11px;
+    }
+
+    .summary-card.success {
+      border-color: #bbf7d0;
+      background: var(--success-soft);
+    }
+
+    .summary-card.success .summary-card-value {
+      color: var(--success);
+    }
+
+    .summary-card.danger {
+      border-color: #fecaca;
+      background: var(--danger-soft);
+    }
+
+    .summary-card.danger .summary-card-value {
+      color: var(--danger);
+    }
+
+    .summary-card.warning {
+      border-color: #fde68a;
+      background: var(--warning-soft);
+    }
+
+    .summary-card.warning .summary-card-value {
+      color: var(--warning);
+    }
+
+    .summary-card.info {
+      border-color: #bfdbfe;
+      background: var(--primary-soft);
+    }
+
+    .summary-card.info .summary-card-value {
+      color: var(--primary);
+    }
+
+    /* =========================================================
+       COMPLIANCE OVERVIEW
+       ========================================================= */
+
+    .analytics-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 18px;
+
+      margin-top: 22px;
+    }
+
+    .analytics-card {
+      padding: 18px;
+
+      border: 1px solid var(--border);
+      border-radius: 12px;
+
+      background: var(--surface);
+    }
+
+    .analytics-card h3 {
+      margin: 0 0 16px;
+
+      font-size: 15px;
+    }
+
+    .progress-row {
+      margin-bottom: 14px;
+    }
+
+    .progress-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+
+      margin-bottom: 7px;
+
+      color: var(--text-soft);
+
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+
+      overflow: hidden;
+
+      border-radius: 999px;
+
+      background: #e2e8f0;
+    }
+
+    .progress-bar {
+      height: 100%;
+
+      border-radius: inherit;
+
+      transition: width 0.3s ease;
+    }
+
+    .progress-bar.insurance {
+      background: var(--primary);
+    }
+
+    .progress-bar.pollution {
+      background: var(--success);
+    }
+
+    /* =========================================================
+       COMPANY TABLE
+       ========================================================= */
+
+    .company-table {
+      width: 100%;
+      border-collapse: collapse;
+
+      min-width: 650px;
+    }
+
+    .company-table th,
+    .company-table td {
+      padding: 12px 14px;
+
+      border-bottom: 1px solid var(--border);
+
+      font-size: 13px;
+
+      text-align: left;
+    }
+
+    .company-table th {
+      background: var(--surface-soft);
+
+      color: var(--text-soft);
+
+      font-size: 11px;
+      font-weight: 800;
+
+      text-transform: uppercase;
+    }
+
+    .company-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* =========================================================
+       MODAL
+       ========================================================= */
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+
+      display: none;
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+
+      background: rgba(15, 23, 42, 0.55);
+
+      backdrop-filter: blur(3px);
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .notification-modal {
+      width: min(560px, 100%);
+
+      max-height: min(700px, calc(100vh - 40px));
+
+      overflow-y: auto;
+
+      border-radius: 16px;
+
+      background: #ffffff;
+
+      box-shadow:
+        0 25px 80px rgba(15, 23, 42, 0.25);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 18px 20px;
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      margin: 0;
+
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .modal-close {
+      width: 36px;
+      height: 36px;
+
+      border: 1px solid var(--border);
+      border-radius: 9px;
+
+      background: #ffffff;
+
+      font-size: 20px;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .notification-message-box {
+      margin-bottom: 18px;
+
+      padding: 15px;
+
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+
+      background: var(--primary-soft);
+
+      color: #1e3a8a;
+
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .notification-recipient-list {
+      display: flex;
+      flex-direction: column;
+
+      gap: 8px;
+
+      margin-bottom: 18px;
+    }
+
+    .recipient-item {
+      padding: 11px 12px;
+
+      border: 1px solid var(--border);
+      border-radius: 9px;
+
+      background: var(--surface-soft);
+    }
+
+    .recipient-id {
+      font-weight: 750;
+    }
+
+    .recipient-reason {
+      margin-top: 3px;
+
+      color: var(--danger);
+
+      font-size: 11px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+
+      padding-top: 15px;
+
+      border-top: 1px solid var(--border);
+    }
+
+    .modal-button {
+      min-height: 40px;
+
+      padding: 9px 16px;
+
+      border-radius: 9px;
+
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .modal-cancel {
+      border: 1px solid var(--border-dark);
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    .modal-send {
+      border: 1px solid var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .modal-send:hover {
+      background: var(--primary-dark);
+    }
+
+    /* =========================================================
+       TOAST
+       ========================================================= */
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 6000;
+
+      min-width: 280px;
+      max-width: 420px;
+
+      padding: 14px 16px;
+
+      border: 1px solid var(--border);
+      border-radius: 10px;
+
+      background: #ffffff;
+
+      box-shadow: var(--shadow);
+
+      opacity: 0;
+      transform: translateY(10px);
+
+      pointer-events: none;
+
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast-title {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .toast-message {
+      margin-top: 3px;
+
+      color: var(--text-soft);
+
+      font-size: 12px;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+      .summary-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+      .filters-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 800px) {
+      .top-header {
+        padding: 0 14px;
+      }
+
+      .brand-subtitle {
+        display: none;
+      }
+
+      .page-container {
+        width: min(100% - 24px, 1600px);
+
+        padding-top: 20px;
+      }
+
+      .page-heading h1 {
+        font-size: 25px;
+      }
+
+      .location-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .apply-button {
+        width: 100%;
+      }
+
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .vehicle-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .toolbar-actions {
+        width: 100%;
+      }
+
+      .select-all-button,
+      .notification-button {
+        flex: 1;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .connection-status span {
+        display: none;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .content-padding {
+        padding: 15px;
+      }
+
+      .section-header {
+        padding: 15px;
+      }
+
+      .toast {
+        right: 12px;
+        bottom: 12px;
+        left: 12px;
+
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =======================================================
+       HEADER
+       ======================================================== -->
+
+  <header class="top-header">
+
+    <div class="header-left">
+
+      <button
+        id="menuButton"
+        class="menu-button"
+        type="button"
+        aria-label="Open navigation"
+      >
+        ☰
+      </button>
+
+      <div class="brand">
+
+        <img
+          src="../asset/logo.png"
+          alt="SafePath"
+          class="brand-logo"
+        />
+
+        <div>
+          <div class="brand-title">
+            SafePath
+          </div>
+
+          <div class="brand-subtitle">
+            Road Safety Control System
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      id="connectionStatus"
+      class="connection-status"
+    >
+      <span
+        id="connectionDot"
+        class="connection-dot"
+      ></span>
+
+      <span id="connectionText">
+        System Connected
+      </span>
+    </div>
+
+  </header>
+
+
+  <!-- =======================================================
+       NAVIGATION DRAWER
+       ======================================================== -->
+
+  <div
+    id="navigationOverlay"
+    class="navigation-overlay"
+  >
+
+    <aside
+      id="navigationDrawer"
+      class="navigation-drawer"
+    >
+
+      <div class="drawer-header">
+
+        <div class="drawer-title">
+          SafePath Navigation
+        </div>
+
+        <button
+          id="closeMenuButton"
+          class="close-menu-button"
+          type="button"
+          aria-label="Close navigation"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <nav class="drawer-navigation">
+
+        <a href="./Overview.html">
+          Overview
+        </a>
+
+        <a href="./vehicles.html">
+          Vehicles
+        </a>
+
+        <a href="./livemap.html">
+          Live Map
+        </a>
+
+        <a href="./alerts.html">
+          Alerts
+        </a>
+
+        <a href="./events.html">
+          Events
+        </a>
+
+        <a href="./history.html">
+          History
+        </a>
+
+        <a href="./fine.html">
+          Traffic Fine
+        </a>
+
+        <a href="./toll.html">
+          Toll Tax
+        </a>
+
+        <a
+          href="./insurance.html"
+          class="active"
+        >
+          Insurance and Pollution
+        </a>
+<a href="stolen.html">
+  Search Stolen Vehicle
+</a>
+
+<a href="./monitor.html">
+    Monitor
+</a>
+      </nav>
+
+    </aside>
+
+  </div>
+
+
+  <!-- =======================================================
+       PAGE
+       ======================================================== -->
+
+  <main class="page-container">
+
+
+    <!-- =====================================================
+         TOP VEHICLE COMPLIANCE SECTION
+         ====================================================== -->
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <div>
+          <h2 class="section-title">
+            Vehicle Insurance & Pollution Compliance
+          </h2>
+
+          <p class="section-description">
+            Select vehicles that require Insurance or Pollution
+            action and send a notification to the vehicle owner.
+          </p>
+        </div>
+
+      </div>
+
+
+      <!-- TOOLBAR -->
+
+      <div class="vehicle-toolbar">
+
+        <div
+          id="selectionSummary"
+          class="selection-summary"
+        >
+          <strong>0</strong>
+          vehicles selected
+        </div>
+
+        <div class="toolbar-actions">
+
+          <button
+            id="selectAllButton"
+            class="select-all-button"
+            type="button"
+          >
+            Select All
+          </button>
+
+          <button
+            id="sendNotificationButton"
+            class="notification-button"
+            type="button"
+            disabled
+          >
+            Send Notification
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- VEHICLE TABLE -->
+
+      <div class="table-wrapper">
+
+        <table class="vehicle-table">
+
+          <thead>
+
+            <tr>
+
+              <th class="checkbox-cell">
+                <input
+                  id="selectAllCheckbox"
+                  type="checkbox"
+                  aria-label="Select all eligible vehicles"
+                />
+              </th>
+
+              <th>
+                Vehicle ID
+              </th>
+
+              <th>
+                Vehicle Type
+              </th>
+
+              <th>
+                Insurance Company
+              </th>
+
+              <th>
+                Insurance
+              </th>
+
+              <th>
+                Insurance Expiry
+              </th>
+
+              <th>
+                Pollution
+              </th>
+
+              <th>
+                Pollution Expiry
+              </th>
+
+              <th>
+                Action Required
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="vehicleTableBody">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INSURANCE & POLLUTION
+         ====================================================== -->
+
+    <div class="page-heading">
+
+      <h1>
+        Insurance & Pollution
+      </h1>
+
+      <p>
+        Vehicle insurance and pollution certificate compliance
+        monitoring.
+      </p>
+
+    </div>
+
+
+    <section class="section">
+
+      <div class="content-padding">
+
+        <div class="demo-label">
+          Demo Data
+        </div>
+
+
+        <!-- LOCATION -->
+
+        <div class="location-grid">
+
+          <div class="field-group">
+
+            <label
+              class="field-label"
+              for="stateSelect"
+            >
+              Select State
+            </label>
+
+            <select
+              id="stateSelect"
+              class="field-control"
+            >
+
+              <option value="Telangana">
+                Telangana
+              </option>
+
+              <option value="Delhi">
+                Delhi
+              </option>
+
+              <option value="Madhya Pradesh">
+                Madhya Pradesh
+              </option>
+
+              <option value="Maharashtra">
+                Maharashtra
+              </option>
+
+              <option value="Karnataka">
+                Karnataka
+              </option>
+
+              <option value="Kerala">
+                Kerala
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field-group">
+
+            <label
+              class="field-label"
+              for="cityInput"
+            >
+              Select City
+            </label>
+
+            <input
+              id="cityInput"
+              class="field-control"
+              type="text"
+              value="Karimnagar"
+              placeholder="Enter city"
+            />
+
+          </div>
+
+
+          <button
+            id="applyLocationButton"
+            class="apply-button"
+            type="button"
+          >
+            Apply Location
+          </button>
+
+        </div>
+
+
+        <div
+          id="locationInfo"
+          class="location-info"
+        >
+          Showing demo vehicle compliance for
+          <strong>Karimnagar, Telangana</strong>.
+        </div>
+
+
+        <!-- FILTERS -->
+
+        <div class="filters-grid">
+
+          <div class="field-group">
+
+            <label
+              class="field-label"
+              for="vehicleTypeFilter"
+            >
+              Vehicle Type
+            </label>
+
+            <select
+              id="vehicleTypeFilter"
+              class="field-control"
+            >
+
+              <option value="ALL">
+                All Vehicle Types
+              </option>
+
+              <option value="NORMAL">
+                NORMAL
+              </option>
+
+              <option value="LCV">
+                LCV
+              </option>
+
+              <option value="Bus / Truck">
+                Bus / Truck
+              </option>
+
+              <option value="Car / Jeep / Van">
+                Car / Jeep / Van
+              </option>
+
+              <option value="Upto 3 Axle">
+                Upto 3 Axle
+              </option>
+
+              <option value="4 to 6 Axle">
+                4 to 6 Axle
+              </option>
+
+              <option value="HCM / EME">
+                HCM / EME
+              </option>
+
+              <option value="7 or more Axle Vehicle">
+                7 or more Axle Vehicle
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field-group">
+
+            <label
+              class="field-label"
+              for="insuranceFilter"
+            >
+              Insurance
+            </label>
+
+            <select
+              id="insuranceFilter"
+              class="field-control"
+            >
+
+              <option value="ALL">
+                All
+              </option>
+
+              <option value="Active">
+                Active
+              </option>
+
+              <option value="Missing">
+                Missing
+              </option>
+
+              <option value="Expiring Soon">
+                Expiring Soon
+              </option>
+
+              <option value="Expired">
+                Expired
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field-group">
+
+            <label
+              class="field-label"
+              for="pollutionFilter"
+            >
+              Pollution
+            </label>
+
+            <select
+              id="pollutionFilter"
+              class="field-control"
+            >
+
+              <option value="ALL">
+                All
+              </option>
+
+              <option value="Valid">
+                Valid
+              </option>
+
+              <option value="Missing">
+                Missing
+              </option>
+
+              <option value="Expired">
+                Expired
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div class="filter-actions">
+
+          <button
+            id="clearFiltersButton"
+            class="clear-filters"
+            type="button"
+          >
+            Clear Filters
+          </button>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="summary-grid">
+
+          <div class="summary-card info">
+
+            <div class="summary-card-label">
+              Total Vehicles
+            </div>
+
+            <div
+              id="totalVehicles"
+              class="summary-card-value"
+            >
+              0
+            </div>
+
+            <div class="summary-card-note">
+              Vehicles in current view
+            </div>
+
+          </div>
+
+
+          <div class="summary-card success">
+
+            <div class="summary-card-label">
+              Insurance Active
+            </div>
+
+            <div
+              id="insuranceActive"
+              class="summary-card-value"
+            >
+              0
+            </div>
+
+            <div class="summary-card-note">
+              Valid insurance
+            </div>
+
+          </div>
+
+
+          <div class="summary-card danger">
+
+            <div class="summary-card-label">
+              Insurance Missing / Expired
+            </div>
+
+            <div
+              id="insuranceMissing"
+              class="summary-card-value"
+            >
+              0
+            </div>
+
+            <div class="summary-card-note">
+              Action required
+            </div>
+
+          </div>
+
+
+          <div class="summary-card warning">
+
+            <div class="summary-card-label">
+              Pollution Missing / Expired
+            </div>
+
+            <div
+              id="pollutionMissing"
+              class="summary-card-value"
+            >
+              0
+            </div>
+
+            <div class="summary-card-note">
+              Action required
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- COMPLIANCE ANALYTICS -->
+
+        <div class="analytics-grid">
+
+          <div class="analytics-card">
+
+            <h3>
+              Insurance Compliance
+            </h3>
+
+            <div class="progress-row">
+
+              <div class="progress-label">
+                <span>
+                  Active
+                </span>
+
+                <span id="insuranceProgressText">
+                  0%
+                </span>
+              </div>
+
+              <div class="progress-track">
+
+                <div
+                  id="insuranceProgress"
+                  class="progress-bar insurance"
+                  style="width: 0%"
+                ></div>
+
+              </div>
+
+            </div>
+
+            <div class="progress-row">
+
+              <div class="progress-label">
+                <span>
+                  Missing / Expired
+                </span>
+
+                <span id="insuranceProblemProgressText">
+                  0%
+                </span>
+              </div>
+
+              <div class="progress-track">
+
+                <div
+                  id="insuranceProblemProgress"
+                  class="progress-bar"
+                  style="width: 0%; background: #dc2626;"
+                ></div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="analytics-card">
+
+            <h3>
+              Pollution Compliance
+            </h3>
+
+            <div class="progress-row">
+
+              <div class="progress-label">
+                <span>
+                  Valid
+                </span>
+
+                <span id="pollutionProgressText">
+                  0%
+                </span>
+              </div>
+
+              <div class="progress-track">
+
+                <div
+                  id="pollutionProgress"
+                  class="progress-bar pollution"
+                  style="width: 0%"
+                ></div>
+
+              </div>
+
+            </div>
+
+            <div class="progress-row">
+
+              <div class="progress-label">
+
+                <span>
+                  Missing / Expired
+                </span>
+
+                <span id="pollutionProblemProgressText">
+                  0%
+                </span>
+
+              </div>
+
+              <div class="progress-track">
+
+                <div
+                  id="pollutionProblemProgress"
+                  class="progress-bar"
+                  style="width: 0%; background: #dc2626;"
+                ></div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INSURANCE COMPANIES
+         ====================================================== -->
+
+    <section class="section">
+
+      <div class="section-header">
+
+        <div>
+
+          <h2 class="section-title">
+            Insurance Companies
+          </h2>
+
+          <p class="section-description">
+            Insurance providers used in the demo fleet.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="table-wrapper">
+
+        <table class="company-table">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                #
+              </th>
+
+              <th>
+                Insurance Company
+              </th>
+
+              <th>
+                Vehicles
+              </th>
+
+              <th>
+                Active
+              </th>
+
+              <th>
+                Missing / Expired
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="companyTableBody">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =======================================================
+       NOTIFICATION MODAL
+       ======================================================== -->
+
+  <div
+    id="notificationModal"
+    class="modal-overlay"
+    aria-hidden="true"
+  >
+
+    <div
+      class="notification-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="notificationModalTitle"
+    >
+
+      <div class="modal-header">
+
+        <h2
+          id="notificationModalTitle"
+          class="modal-title"
+        >
+          Send Notification
+        </h2>
+
+        <button
+          id="closeNotificationModal"
+          class="modal-close"
+          type="button"
+          aria-label="Close notification dialog"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="modal-body">
+
+        <div
+          id="notificationMessage"
+          class="notification-message-box"
+        >
+        </div>
+
+
+        <div
+          id="notificationRecipients"
+          class="notification-recipient-list"
+        >
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            id="cancelNotificationButton"
+            class="modal-button modal-cancel"
+            type="button"
+          >
+            Cancel
+          </button>
+
+          <button
+            id="confirmNotificationButton"
+            class="modal-button modal-send"
+            type="button"
+          >
+            Send Notification
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       TOAST
+       ======================================================== -->
+
+  <div
+    id="toast"
+    class="toast"
+  >
+
+    <div
+      id="toastTitle"
+      class="toast-title"
+    >
+      Notification
+    </div>
+
+    <div
+      id="toastMessage"
+      class="toast-message"
+    >
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       JAVASCRIPT
+       ======================================================== -->
+
+  <script>
+    /* =========================================================
+       DEMO DATA
+       ========================================================= */
+
+    const vehicles = [
+
+      {
+        vehicleId: "TS02ER8769",
+        vehicleType: "NORMAL",
+        insuranceCompany: "Tata AIG General Insurance",
+        insurance: "Active",
+        insuranceExpiry: "12 Dec 2026",
+        pollution: "Valid",
+        pollutionExpiry: "18 Nov 2026"
+      },
+
+      {
+        vehicleId: "TS02EZ1234",
+        vehicleType: "NORMAL",
+        insuranceCompany: "HDFC ERGO General Insurance",
+        insurance: "Active",
+        insuranceExpiry: "08 Jan 2027",
+        pollution: "Valid",
+        pollutionExpiry: "22 Dec 2026"
+      },
+
+      {
+        vehicleId: "VEHICLE_001",
+        vehicleType: "NORMAL",
+        insuranceCompany: "ICICI Lombard General Insurance",
+        insurance: "Missing",
+        insuranceExpiry: "—",
+        pollution: "Expired",
+        pollutionExpiry: "04 Oct 2026"
+      },
+
+      {
+        vehicleId: "TS08AB1234",
+        vehicleType: "LCV",
+        insuranceCompany: "Bajaj Allianz General Insurance",
+        insurance: "Active",
+        insuranceExpiry: "17 Mar 2027",
+        pollution: "Valid",
+        pollutionExpiry: "11 Feb 2027"
+      },
+
+      {
+        vehicleId: "TS09CD7788",
+        vehicleType: "Bus / Truck",
+        insuranceCompany: "SBI General Insurance",
+        insurance: "Active",
+        insuranceExpiry: "29 Nov 2026",
+        pollution: "Valid",
+        pollutionExpiry: "02 Nov 2026"
+      },
+
+      {
+        vehicleId: "TS10EF4521",
+        vehicleType: "Car / Jeep / Van",
+        insuranceCompany: "New India Assurance Co.",
+        insurance: "Missing",
+        insuranceExpiry: "—",
+        pollution: "Valid",
+        pollutionExpiry: "15 Jan 2027"
+      },
+
+      {
+        vehicleId: "TS11GH8812",
+        vehicleType: "LCV",
+        insuranceCompany: "Go Digit General Insurance",
+        insurance: "Active",
+        insuranceExpiry: "21 May 2027",
+        pollution: "Missing",
+        pollutionExpiry: "—"
+      },
+
+      {
+        vehicleId: "TS12JK9087",
+        vehicleType: "Upto 3 Axle",
+        insuranceCompany: "Oriental Insurance Co.",
+        insurance: "Active",
+        insuranceExpiry: "06 Feb 2027",
+        pollution: "Valid",
+        pollutionExpiry: "20 Dec 2026"
+      }
+
+    ];
+
+
+    /* =========================================================
+       STATE
+       ========================================================= */
+
+    const state = {
+      selectedVehicleIds: new Set(),
+      filteredVehicles: [...vehicles],
+      pendingNotificationVehicleIds: []
+    };
+
+
+    /* =========================================================
+       DOM
+       ========================================================= */
+
+    const menuButton =
+      document.getElementById("menuButton");
+
+    const closeMenuButton =
+      document.getElementById("closeMenuButton");
+
+    const navigationOverlay =
+      document.getElementById("navigationOverlay");
+
+    const stateSelect =
+      document.getElementById("stateSelect");
+
+    const cityInput =
+      document.getElementById("cityInput");
+
+    const applyLocationButton =
+      document.getElementById("applyLocationButton");
+
+    const locationInfo =
+      document.getElementById("locationInfo");
+
+    const vehicleTypeFilter =
+      document.getElementById("vehicleTypeFilter");
+
+    const insuranceFilter =
+      document.getElementById("insuranceFilter");
+
+    const pollutionFilter =
+      document.getElementById("pollutionFilter");
+
+    const clearFiltersButton =
+      document.getElementById("clearFiltersButton");
+
+    const vehicleTableBody =
+      document.getElementById("vehicleTableBody");
+
+    const selectAllButton =
+      document.getElementById("selectAllButton");
+
+    const selectAllCheckbox =
+      document.getElementById("selectAllCheckbox");
+
+    const sendNotificationButton =
+      document.getElementById(
+        "sendNotificationButton"
+      );
+
+    const selectionSummary =
+      document.getElementById(
+        "selectionSummary"
+      );
+
+    const notificationModal =
+      document.getElementById(
+        "notificationModal"
+      );
+
+    const closeNotificationModal =
+      document.getElementById(
+        "closeNotificationModal"
+      );
+
+    const cancelNotificationButton =
+      document.getElementById(
+        "cancelNotificationButton"
+      );
+
+    const confirmNotificationButton =
+      document.getElementById(
+        "confirmNotificationButton"
+      );
+
+    const notificationMessage =
+      document.getElementById(
+        "notificationMessage"
+      );
+
+    const notificationRecipients =
+      document.getElementById(
+        "notificationRecipients"
+      );
+
+    const toast =
+      document.getElementById("toast");
+
+    const toastTitle =
+      document.getElementById("toastTitle");
+
+    const toastMessage =
+      document.getElementById("toastMessage");
+
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+
+    function openNavigation() {
+      navigationOverlay.classList.add("open");
+    }
+
+
+    function closeNavigation() {
+      navigationOverlay.classList.remove("open");
+    }
+
+
+    menuButton.addEventListener(
+      "click",
+      openNavigation
+    );
+
+
+    closeMenuButton.addEventListener(
+      "click",
+      closeNavigation
+    );
+
+
+    navigationOverlay.addEventListener(
+      "click",
+      (event) => {
+
+        if (
+          event.target ===
+          navigationOverlay
+        ) {
+          closeNavigation();
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       STATUS HELPERS
+       ========================================================= */
+
+    function isInsuranceProblem(vehicle) {
+
+      return (
+        vehicle.insurance === "Missing" ||
+        vehicle.insurance === "Expired" ||
+        vehicle.insurance === "Expiring Soon"
+      );
+
+    }
+
+
+    function isPollutionProblem(vehicle) {
+
+      return (
+        vehicle.pollution === "Missing" ||
+        vehicle.pollution === "Expired"
+      );
+
+    }
+
+
+    function requiresNotification(vehicle) {
+
+      return (
+        isInsuranceProblem(vehicle) ||
+        isPollutionProblem(vehicle)
+      );
+
+    }
+
+
+    function isFullyCompliant(vehicle) {
+
+      return !requiresNotification(vehicle);
+
+    }
+
+
+    function getStatusClass(
+      type,
+      status
+    ) {
+
+      const normalized =
+        String(status)
+          .toLowerCase()
+          .replace(/\s+/g, "-");
+
+      if (
+        type === "insurance" &&
+        status === "Active"
+      ) {
+        return "status-active";
+      }
+
+      if (
+        type === "pollution" &&
+        status === "Valid"
+      ) {
+        return "status-valid";
+      }
+
+      if (
+        status === "Missing"
+      ) {
+        return "status-missing";
+      }
+
+      if (
+        status === "Expired"
+      ) {
+        return "status-expired";
+      }
+
+      if (
+        status === "Expiring Soon"
+      ) {
+        return "status-expiring";
+      }
+
+      return normalized;
+    }
+
+
+    /* =========================================================
+       NOTIFICATION REASON
+       ========================================================= */
+
+    function getNotificationReasons(vehicle) {
+
+      const reasons = [];
+
+      if (
+        vehicle.insurance === "Missing"
+      ) {
+
+        reasons.push(
+          "Insurance is missing"
+        );
+
+      } else if (
+        vehicle.insurance === "Expired"
+      ) {
+
+        reasons.push(
+          "Insurance has expired"
+        );
+
+      } else if (
+        vehicle.insurance === "Expiring Soon"
+      ) {
+
+        reasons.push(
+          "Insurance renewal is due soon"
+        );
+
+      }
+
+
+      if (
+        vehicle.pollution === "Missing"
+      ) {
+
+        reasons.push(
+          "Pollution certificate is missing"
+        );
+
+      } else if (
+        vehicle.pollution === "Expired"
+      ) {
+
+        reasons.push(
+          "Pollution certificate has expired"
+        );
+
+      }
+
+      return reasons;
+    }
+
+
+    function getNotificationMessage(
+      vehicle
+    ) {
+
+      const insuranceProblem =
+        isInsuranceProblem(vehicle);
+
+      const pollutionProblem =
+        isPollutionProblem(vehicle);
+
+
+      if (
+        insuranceProblem &&
+        pollutionProblem
+      ) {
+
+        return (
+          `Dear vehicle owner, your vehicle ` +
+          `${vehicle.vehicleId} requires action on both ` +
+          `Insurance and Pollution compliance. ` +
+          `Please take/renew the required Insurance and ` +
+          `renew/obtain the Pollution Certificate as applicable.`
+        );
+
+      }
+
+
+      if (insuranceProblem) {
+
+        if (
+          vehicle.insurance === "Missing"
+        ) {
+
+          return (
+            `Dear vehicle owner, Insurance for vehicle ` +
+            `${vehicle.vehicleId} is missing. ` +
+            `Please take the required vehicle Insurance.`
+          );
+
+        }
+
+        return (
+          `Dear vehicle owner, Insurance for vehicle ` +
+          `${vehicle.vehicleId} requires renewal. ` +
+          `Please renew the vehicle Insurance.`
+        );
+
+      }
+
+
+      if (pollutionProblem) {
+
+        if (
+          vehicle.pollution === "Missing"
+        ) {
+
+          return (
+            `Dear vehicle owner, the Pollution Certificate ` +
+            `for vehicle ${vehicle.vehicleId} is missing. ` +
+            `Please obtain the required Pollution Certificate.`
+          );
+
+        }
+
+        return (
+          `Dear vehicle owner, the Pollution Certificate ` +
+          `for vehicle ${vehicle.vehicleId} has expired. ` +
+          `Please renew the Pollution Certificate.`
+        );
+
+      }
+
+
+      return "";
+    }
+
+
+    /* =========================================================
+       RENDER VEHICLE TABLE
+       ========================================================= */
+
+    function renderVehicleTable() {
+
+      vehicleTableBody.innerHTML = "";
+
+      if (
+        state.filteredVehicles.length === 0
+      ) {
+
+        const row =
+          document.createElement("tr");
+
+        row.innerHTML = `
+          <td
+            colspan="9"
+            class="table-empty"
+          >
+            No vehicles match the selected filters.
+          </td>
+        `;
+
+        vehicleTableBody.appendChild(row);
+
+        updateSelectionControls();
+
+        return;
+      }
+
+
+      state.filteredVehicles.forEach(
+        (vehicle) => {
+
+          const row =
+            document.createElement("tr");
+
+          const canNotify =
+            requiresNotification(vehicle);
+
+          if (canNotify) {
+            row.classList.add(
+              "notifiable-row"
+            );
+          } else {
+            row.classList.add(
+              "compliant-row"
+            );
+          }
+
+
+          const selected =
+            state.selectedVehicleIds.has(
+              vehicle.vehicleId
+            );
+
+
+          const reasons =
+            getNotificationReasons(
+              vehicle
+            );
+
+
+          row.innerHTML = `
+
+            <td class="checkbox-cell">
+
+              ${
+                canNotify
+                  ? `
+                    <input
+                      class="vehicle-checkbox"
+                      type="checkbox"
+                      data-vehicle-id="${escapeHtml(
+                        vehicle.vehicleId
+                      )}"
+                      ${
+                        selected
+                          ? "checked"
+                          : ""
+                      }
+                      aria-label="Select ${
+                        escapeHtml(
+                          vehicle.vehicleId
+                        )
+                      }"
+                    />
+                  `
+                  : `
+                    <input
+                      class="vehicle-checkbox"
+                      type="checkbox"
+                      disabled
+                      title="Vehicle is fully compliant"
+                      aria-label="Vehicle is fully compliant"
+                    />
+                  `
+              }
+
+            </td>
+
+
+            <td>
+              <span class="vehicle-id">
+                ${escapeHtml(
+                  vehicle.vehicleId
+                )}
+              </span>
+            </td>
+
+
+            <td>
+              <span class="vehicle-type">
+                ${escapeHtml(
+                  vehicle.vehicleType
+                )}
+              </span>
+            </td>
+
+
+            <td>
+              <span class="insurance-company">
+                ${escapeHtml(
+                  vehicle.insuranceCompany
+                )}
+              </span>
+            </td>
+
+
+            <td>
+
+              <span
+                class="status-badge ${getStatusClass(
+                  "insurance",
+                  vehicle.insurance
+                )}"
+              >
+                ${escapeHtml(
+                  vehicle.insurance
+                )}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span class="expiry-date">
+                ${escapeHtml(
+                  vehicle.insuranceExpiry
+                )}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span
+                class="status-badge ${getStatusClass(
+                  "pollution",
+                  vehicle.pollution
+                )}"
+              >
+                ${escapeHtml(
+                  vehicle.pollution
+                )}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              <span class="expiry-date">
+                ${escapeHtml(
+                  vehicle.pollutionExpiry
+                )}
+              </span>
+
+            </td>
+
+
+            <td>
+
+              ${
+                canNotify
+                  ? `
+                    <span class="notifiable-label">
+                      ${escapeHtml(
+                        reasons.join(" + ")
+                      )}
+                    </span>
+                  `
+                  : `
+                    <span
+                      class="status-badge status-valid"
+                    >
+                      Compliant
+                    </span>
+                  `
+              }
+
+            </td>
+
+          `;
+
+
+          const checkbox =
+            row.querySelector(
+              ".vehicle-checkbox:not(:disabled)"
+            );
+
+
+          if (checkbox) {
+
+            checkbox.addEventListener(
+              "change",
+              () => {
+
+                if (
+                  checkbox.checked
+                ) {
+
+                  state.selectedVehicleIds.add(
+                    vehicle.vehicleId
+                  );
+
+                } else {
+
+                  state.selectedVehicleIds.delete(
+                    vehicle.vehicleId
+                  );
+
+                }
+
+                updateSelectionControls();
+
+              }
+            );
+
+          }
+
+
+          vehicleTableBody.appendChild(
+            row
+          );
+
+        }
+      );
+
+
+      updateSelectionControls();
+
+    }
+
+
+    /* =========================================================
+       SELECTION
+       ========================================================= */
+
+    function getVisibleNotifiableVehicles() {
+
+      return state.filteredVehicles.filter(
+        requiresNotification
+      );
+
+    }
+
+
+    function updateSelectionControls() {
+
+      const selectedCount =
+        state.selectedVehicleIds.size;
+
+
+      const visibleNotifiable =
+        getVisibleNotifiableVehicles();
+
+
+      const visibleIds =
+        new Set(
+          visibleNotifiable.map(
+            (vehicle) =>
+              vehicle.vehicleId
+          )
+        );
+
+
+      let visibleSelectedCount = 0;
+
+      visibleIds.forEach(
+        (vehicleId) => {
+
+          if (
+            state.selectedVehicleIds.has(
+              vehicleId
+            )
+          ) {
+
+            visibleSelectedCount++;
+
+          }
+
+        }
+      );
+
+
+      selectionSummary.innerHTML =
+        `<strong>${selectedCount}</strong> ` +
+        `vehicle${selectedCount === 1 ? "" : "s"} selected`;
+
+
+      sendNotificationButton.disabled =
+        selectedCount === 0;
+
+
+      if (
+        visibleNotifiable.length === 0
+      ) {
+
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false;
+
+        selectAllButton.textContent =
+          "Select All";
+
+        return;
+      }
+
+
+      if (
+        visibleSelectedCount ===
+        visibleNotifiable.length
+      ) {
+
+        selectAllCheckbox.checked = true;
+        selectAllCheckbox.indeterminate = false;
+
+        selectAllButton.textContent =
+          "Clear All";
+
+      } else if (
+        visibleSelectedCount > 0
+      ) {
+
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = true;
+
+        selectAllButton.textContent =
+          "Select All";
+
+      } else {
+
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false;
+
+        selectAllButton.textContent =
+          "Select All";
+
+      }
+
+    }
+
+
+    function selectAllVisible() {
+
+      const visibleNotifiable =
+        getVisibleNotifiableVehicles();
+
+
+      visibleNotifiable.forEach(
+        (vehicle) => {
+
+          state.selectedVehicleIds.add(
+            vehicle.vehicleId
+          );
+
+        }
+      );
+
+
+      renderVehicleTable();
+
+    }
+
+
+    function clearAllVisible() {
+
+      const visibleNotifiable =
+        getVisibleNotifiableVehicles();
+
+
+      visibleNotifiable.forEach(
+        (vehicle) => {
+
+          state.selectedVehicleIds.delete(
+            vehicle.vehicleId
+          );
+
+        }
+      );
+
+
+      renderVehicleTable();
+
+    }
+
+
+    selectAllButton.addEventListener(
+      "click",
+      () => {
+
+        const visibleNotifiable =
+          getVisibleNotifiableVehicles();
+
+
+        const allSelected =
+          visibleNotifiable.length > 0 &&
+          visibleNotifiable.every(
+            (vehicle) =>
+              state.selectedVehicleIds.has(
+                vehicle.vehicleId
+              )
+          );
+
+
+        if (allSelected) {
+
+          clearAllVisible();
+
+        } else {
+
+          selectAllVisible();
+
+        }
+
+      }
+    );
+
+
+    selectAllCheckbox.addEventListener(
+      "change",
+      () => {
+
+        if (
+          selectAllCheckbox.checked
+        ) {
+
+          selectAllVisible();
+
+        } else {
+
+          clearAllVisible();
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       NOTIFICATION MODAL
+       ========================================================= */
+
+    function openNotificationModal() {
+
+      const selectedVehicles =
+        vehicles.filter(
+          (vehicle) =>
+            state.selectedVehicleIds.has(
+              vehicle.vehicleId
+            ) &&
+            requiresNotification(vehicle)
+        );
+
+
+      if (
+        selectedVehicles.length === 0
+      ) {
+
+        showToast(
+          "Notification",
+          "Select at least one vehicle that requires Insurance or Pollution action."
+        );
+
+        return;
+
+      }
+
+
+      state.pendingNotificationVehicleIds =
+        selectedVehicles.map(
+          (vehicle) =>
+            vehicle.vehicleId
+        );
+
+
+      const hasInsuranceProblem =
+        selectedVehicles.some(
+          isInsuranceProblem
+        );
+
+
+      const hasPollutionProblem =
+        selectedVehicles.some(
+          isPollutionProblem
+        );
+
+
+      let message = "";
+
+
+      if (
+        hasInsuranceProblem &&
+        hasPollutionProblem
+      ) {
+
+        message =
+          "Message will be sent to the selected vehicle owners " +
+          "to take or renew Insurance and/or renew or obtain " +
+          "the Pollution Certificate according to the expiry or missing status.";
+
+      } else if (
+        hasInsuranceProblem
+      ) {
+
+        message =
+          "Message will be sent to the selected vehicle owners " +
+          "to take or renew Insurance according to the Insurance status.";
+
+      } else {
+
+        message =
+          "Message will be sent to the selected vehicle owners " +
+          "to renew or obtain the Pollution Certificate according " +
+          "to the Pollution status.";
+
+      }
+
+
+      notificationMessage.textContent =
+        message;
+
+
+      notificationRecipients.innerHTML = "";
+
+
+      selectedVehicles.forEach(
+        (vehicle) => {
+
+          const reasons =
+            getNotificationReasons(
+              vehicle
+            );
+
+
+          const item =
+            document.createElement("div");
+
+          item.className =
+            "recipient-item";
+
+
+          item.innerHTML = `
+
+            <div class="recipient-id">
+              ${escapeHtml(
+                vehicle.vehicleId
+              )}
+            </div>
+
+            <div class="recipient-reason">
+              ${escapeHtml(
+                reasons.join(" + ")
+              )}
+            </div>
+
+          `;
+
+
+          notificationRecipients.appendChild(
+            item
+          );
+
+        }
+      );
+
+
+      notificationModal.classList.add(
+        "open"
+      );
+
+      notificationModal.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+    }
+
+
+    function closeNotificationDialog() {
+
+      notificationModal.classList.remove(
+        "open"
+      );
+
+      notificationModal.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      state.pendingNotificationVehicleIds =
+        [];
+
+    }
+
+
+    sendNotificationButton.addEventListener(
+      "click",
+      openNotificationModal
+    );
+
+
+    closeNotificationModal.addEventListener(
+      "click",
+      closeNotificationDialog
+    );
+
+
+    cancelNotificationButton.addEventListener(
+      "click",
+      closeNotificationDialog
+    );
+
+
+    notificationModal.addEventListener(
+      "click",
+      (event) => {
+
+        if (
+          event.target ===
+          notificationModal
+        ) {
+
+          closeNotificationDialog();
+
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          if (
+            notificationModal.classList.contains(
+              "open"
+            )
+          ) {
+
+            closeNotificationDialog();
+
+          } else {
+
+            closeNavigation();
+
+          }
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       CONFIRM SEND
+       ========================================================= */
+
+    confirmNotificationButton.addEventListener(
+      "click",
+      () => {
+
+        const count =
+          state.pendingNotificationVehicleIds
+            .length;
+
+
+        if (count === 0) {
+
+          closeNotificationDialog();
+
+          return;
+
+        }
+
+
+        /*
+         * DEMO ONLY
+         *
+         * No notification backend has been connected yet.
+         * This represents the point where the selected
+         * vehicle IDs would be sent to the backend notification
+         * service.
+         */
+
+
+        closeNotificationDialog();
+
+
+        showToast(
+          "Notification Sent",
+          `${count} vehicle notification${
+            count === 1 ? "" : "s"
+          } sent successfully in demo mode.`
+        );
+
+
+        state.selectedVehicleIds.clear();
+
+
+        renderVehicleTable();
+
+      }
+    );
+
+
+    /* =========================================================
+       FILTERING
+       ========================================================= */
+
+    function applyFilters() {
+
+      const type =
+        vehicleTypeFilter.value;
+
+      const insurance =
+        insuranceFilter.value;
+
+      const pollution =
+        pollutionFilter.value;
+
+
+      state.filteredVehicles =
+        vehicles.filter(
+          (vehicle) => {
+
+            const typeMatch =
+              type === "ALL" ||
+              vehicle.vehicleType === type;
+
+
+            const insuranceMatch =
+              insurance === "ALL" ||
+              vehicle.insurance === insurance;
+
+
+            const pollutionMatch =
+              pollution === "ALL" ||
+              vehicle.pollution === pollution;
+
+
+            return (
+              typeMatch &&
+              insuranceMatch &&
+              pollutionMatch
+            );
+
+          }
+        );
+
+
+      /*
+       * Keep selections only for vehicles
+       * that are still visible and notifiable.
+       */
+
+      const visibleIds =
+        new Set(
+          state.filteredVehicles
+            .filter(
+              requiresNotification
+            )
+            .map(
+              (vehicle) =>
+                vehicle.vehicleId
+            )
+        );
+
+
+      state.selectedVehicleIds =
+        new Set(
+          [...state.selectedVehicleIds]
+            .filter(
+              (vehicleId) =>
+                visibleIds.has(
+                  vehicleId
+                )
+            )
+        );
+
+
+      renderVehicleTable();
+
+      renderDashboard();
+
+    }
+
+
+    vehicleTypeFilter.addEventListener(
+      "change",
+      applyFilters
+    );
+
+
+    insuranceFilter.addEventListener(
+      "change",
+      applyFilters
+    );
+
+
+    pollutionFilter.addEventListener(
+      "change",
+      applyFilters
+    );
+
+
+    clearFiltersButton.addEventListener(
+      "click",
+      () => {
+
+        vehicleTypeFilter.value =
+          "ALL";
+
+        insuranceFilter.value =
+          "ALL";
+
+        pollutionFilter.value =
+          "ALL";
+
+        state.selectedVehicleIds.clear();
+
+        applyFilters();
+
+      }
+    );
+
+
+    /* =========================================================
+       LOCATION
+       ========================================================= */
+
+    applyLocationButton.addEventListener(
+      "click",
+      () => {
+
+        const stateName =
+          stateSelect.value;
+
+        const city =
+          cityInput.value.trim() ||
+          "All Cities";
+
+
+        locationInfo.innerHTML =
+          `Showing demo vehicle compliance for ` +
+          `<strong>${escapeHtml(
+            city
+          )}, ${escapeHtml(
+            stateName
+          )}</strong>.`;
+
+
+        showToast(
+          "Location Updated",
+          `Showing demo compliance for ${city}, ${stateName}.`
+        );
+
+      }
+    );
+
+
+    /* =========================================================
+       DASHBOARD
+       ========================================================= */
+
+    function renderDashboard() {
+
+      const list =
+        state.filteredVehicles;
+
+
+      const total =
+        list.length;
+
+
+      const insuranceActive =
+        list.filter(
+          (vehicle) =>
+            vehicle.insurance === "Active"
+        ).length;
+
+
+      const insuranceProblem =
+        list.filter(
+          isInsuranceProblem
+        ).length;
+
+
+      const pollutionValid =
+        list.filter(
+          (vehicle) =>
+            vehicle.pollution === "Valid"
+        ).length;
+
+
+      const pollutionProblem =
+        list.filter(
+          isPollutionProblem
+        ).length;
+
+
+      document.getElementById(
+        "totalVehicles"
+      ).textContent =
+        total;
+
+
+      document.getElementById(
+        "insuranceActive"
+      ).textContent =
+        insuranceActive;
+
+
+      document.getElementById(
+        "insuranceMissing"
+      ).textContent =
+        insuranceProblem;
+
+
+      document.getElementById(
+        "pollutionMissing"
+      ).textContent =
+        pollutionProblem;
+
+
+      const insurancePercent =
+        total > 0
+          ? Math.round(
+              (
+                insuranceActive /
+                total
+              ) * 100
+            )
+          : 0;
+
+
+      const insuranceProblemPercent =
+        total > 0
+          ? Math.round(
+              (
+                insuranceProblem /
+                total
+              ) * 100
+            )
+          : 0;
+
+
+      const pollutionPercent =
+        total > 0
+          ? Math.round(
+              (
+                pollutionValid /
+                total
+              ) * 100
+            )
+          : 0;
+
+
+      const pollutionProblemPercent =
+        total > 0
+          ? Math.round(
+              (
+                pollutionProblem /
+                total
+              ) * 100
+            )
+          : 0;
+
+
+      document.getElementById(
+        "insuranceProgress"
+      ).style.width =
+        `${insurancePercent}%`;
+
+
+      document.getElementById(
+        "insuranceProgressText"
+      ).textContent =
+        `${insurancePercent}%`;
+
+
+      document.getElementById(
+        "insuranceProblemProgress"
+      ).style.width =
+        `${insuranceProblemPercent}%`;
+
+
+      document.getElementById(
+        "insuranceProblemProgressText"
+      ).textContent =
+        `${insuranceProblemPercent}%`;
+
+
+      document.getElementById(
+        "pollutionProgress"
+      ).style.width =
+        `${pollutionPercent}%`;
+
+
+      document.getElementById(
+        "pollutionProgressText"
+      ).textContent =
+        `${pollutionPercent}%`;
+
+
+      document.getElementById(
+        "pollutionProblemProgress"
+      ).style.width =
+        `${pollutionProblemPercent}%`;
+
+
+      document.getElementById(
+        "pollutionProblemProgressText"
+      ).textContent =
+        `${pollutionProblemPercent}%`;
+
+
+      renderCompanyTable(list);
+
+    }
+
+
+    /* =========================================================
+       COMPANY TABLE
+       ========================================================= */
+
+    const insuranceCompanies = [
+
+      "Tata AIG General Insurance",
+
+      "HDFC ERGO General Insurance",
+
+      "ICICI Lombard General Insurance",
+
+      "Bajaj Allianz General Insurance",
+
+      "SBI General Insurance",
+
+      "New India Assurance Co.",
+
+      "Go Digit General Insurance",
+
+      "Oriental Insurance Co."
+
+    ];
+
+
+    function renderCompanyTable(
+      list
+    ) {
+
+      const body =
+        document.getElementById(
+          "companyTableBody"
+        );
+
+
+      body.innerHTML = "";
+
+
+      insuranceCompanies.forEach(
+        (
+          company,
+          index
+        ) => {
+
+          const companyVehicles =
+            list.filter(
+              (vehicle) =>
+                vehicle.insuranceCompany ===
+                company
+            );
+
+
+          const active =
+            companyVehicles.filter(
+              (vehicle) =>
+                vehicle.insurance ===
+                "Active"
+            ).length;
+
+
+          const problem =
+            companyVehicles.filter(
+              isInsuranceProblem
+            ).length;
+
+
+          const row =
+            document.createElement("tr");
+
+
+          row.innerHTML = `
+
+            <td>
+              ${index + 1}
+            </td>
+
+            <td>
+              <strong>
+                ${escapeHtml(
+                  company
+                )}
+              </strong>
+            </td>
+
+            <td>
+              ${companyVehicles.length}
+            </td>
+
+            <td>
+              ${active}
+            </td>
+
+            <td>
+              ${problem}
+            </td>
+
+          `;
+
+
+          body.appendChild(row);
+
+        }
+      );
+
+    }
+
+
+    /* =========================================================
+       TOAST
+       ========================================================= */
+
+    let toastTimer = null;
+
+
+    function showToast(
+      title,
+      message
+    ) {
+
+      toastTitle.textContent =
+        title;
+
+      toastMessage.textContent =
+        message;
+
+
+      toast.classList.add(
+        "show"
+      );
+
+
+      clearTimeout(
+        toastTimer
+      );
+
+
+      toastTimer =
+        setTimeout(
+          () => {
+
+            toast.classList.remove(
+              "show"
+            );
+
+          },
+          3500
+        );
+
+    }
+
+
+    /* =========================================================
+       HTML ESCAPE
+       ========================================================= */
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(value)
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* =========================================================
+       INITIALIZE
+       ========================================================= */
+
+    function initialize() {
+
+      renderVehicleTable();
+
+      renderDashboard();
+
+      updateSelectionControls();
+
+    }
+
+
+    initialize();
+
+  </script>
+
+</body>
+</html>

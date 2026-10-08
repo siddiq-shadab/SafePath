@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>SafePath - History</title>
+
+  <link
+    rel="stylesheet"
+    href="../css/history.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+</head>
+
+<body>
+
+  <!-- Navigation Drawer -->
+  <div
+    id="navigationOverlay"
+    class="navigation-overlay"
+  ></div>
+
+  <aside
+    id="navigationDrawer"
+    class="navigation-drawer"
+  >
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <strong>SafePath</strong>
+        <span>Fleet Control</span>
+      </div>
+
+      <button
+        id="drawerClose"
+        class="drawer-close"
+        type="button"
+        aria-label="Close navigation"
+      >
+        ×
+      </button>
+    </div>
+
+    <nav class="drawer-navigation">
+
+      <a href="./Overview.html">
+  Overview
+</a>
+
+      <a href="vehicles.html">
+        Vehicles
+      </a>
+
+      <a href="livemap.html">
+        Live Map
+      </a>
+
+      <a href="alerts.html">
+        Alerts
+      </a>
+
+      <a href="events.html">
+        Events
+      </a>
+
+      <a
+        href="history.html"
+        class="active"
+      >
+        History
+      </a>
+<a href="fine.html">
+    Traffic Fine
+</a>
+
+<a href="toll.html">
+    Toll Tax
+</a>
+
+<a href="insurance.html">
+    Insurance and Pollution
+</a>
+
+<a href="stolen.html">
+  Search Stolen Vehicle
+</a>
+
+<a href="./monitor.html">
+    Monitor
+</a>
+
+    </nav>
+  </aside>
+
+
+  <!-- Main Application -->
+  <div class="page">
+
+    <!-- Header -->
+    <header class="page-header">
+
+      <div class="header-left">
+
+        <button
+          id="menuButton"
+          class="menu-button"
+          type="button"
+          aria-label="Open navigation"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="page-heading">
+          <h1>History</h1>
+          <p>SafePath Vehicle History</p>
+        </div>
+
+      </div>
+
+
+      <div class="header-right">
+
+        <div
+          id="connectionStatus"
+          class="connection-status checking"
+        >
+          <span class="status-dot"></span>
+          <span id="connectionText">
+            Connecting...
+          </span>
+        </div>
+
+        <button
+          id="refreshButton"
+          class="refresh-button"
+          type="button"
+        >
+          Refresh
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- History Controls -->
+      <section class="panel history-controls">
+
+        <div class="panel-heading">
+
+          <h2>Vehicle History</h2>
+
+          <p>
+            View historical telemetry stored in PostgreSQL/PostGIS.
+          </p>
+
+        </div>
+
+
+        <div class="filter-grid">
+
+          <!-- Vehicle -->
+          <div class="filter-field">
+
+            <label for="vehicleSelect">
+              VEHICLE
+            </label>
+
+            <select
+              id="vehicleSelect"
+            >
+              <option value="">
+                Select vehicle
+              </option>
+            </select>
+
+          </div>
+
+
+          <!-- From -->
+          <div class="filter-field">
+
+            <label for="fromDate">
+              FROM
+            </label>
+
+            <input
+              id="fromDate"
+              type="datetime-local"
+            />
+
+          </div>
+
+
+          <!-- To -->
+          <div class="filter-field">
+
+            <label for="toDate">
+              TO
+            </label>
+
+            <input
+              id="toDate"
+              type="datetime-local"
+            />
+
+          </div>
+
+
+          <!-- Records -->
+          <div class="filter-field">
+
+            <label for="recordLimit">
+              RECORDS
+            </label>
+
+            <select
+              id="recordLimit"
+            >
+              <option value="100">
+                100
+              </option>
+
+              <option value="500">
+                500
+              </option>
+
+              <option
+                value="1000"
+                selected
+              >
+                1,000
+              </option>
+
+              <option value="5000">
+                5,000
+              </option>
+
+              <option value="10000">
+                10,000
+              </option>
+
+              <option value="50000">
+                50,000
+              </option>
+            </select>
+
+          </div>
+
+
+          <!-- Actions -->
+          <div class="filter-actions">
+
+            <button
+              id="loadHistoryButton"
+              class="primary-button"
+              type="button"
+            >
+              Load History
+            </button>
+
+            <button
+              id="clearButton"
+              class="secondary-button"
+              type="button"
+            >
+              Clear
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- Statistics -->
+      <section class="statistics-grid">
+
+        <div class="stat-card">
+
+          <span class="stat-label">
+            VEHICLE
+          </span>
+
+          <strong
+            id="statVehicle"
+            class="stat-value"
+          >
+            —
+          </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <span class="stat-label">
+            RECORDS
+          </span>
+
+          <strong
+            id="statRecords"
+            class="stat-value"
+          >
+            0
+          </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <span class="stat-label">
+            FIRST RECORD
+          </span>
+
+          <strong
+            id="statFirstRecord"
+            class="stat-value"
+          >
+            —
+          </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <span class="stat-label">
+            LAST RECORD
+          </span>
+
+          <strong
+            id="statLastRecord"
+            class="stat-value"
+          >
+            —
+          </strong>
+
+        </div>
+
+      </section>
+
+
+      <!-- Error -->
+      <div
+        id="historyError"
+        class="error-message hidden"
+      >
+        <strong id="errorTitle">
+          Unable to load history.
+        </strong>
+
+        <span id="errorText"></span>
+      </div>
+
+
+      <!-- History Table -->
+      <section
+        id="historyTablePanel"
+        class="panel history-table-panel hidden"
+      >
+
+        <div class="panel-heading table-heading">
+
+          <div>
+            <h2>Telemetry Records</h2>
+
+            <p>
+              Historical telemetry received from SafePath backend.
+            </p>
+          </div>
+
+          <div
+            id="recordCountBadge"
+            class="record-count-badge"
+          >
+            0 records
+          </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>VEHICLE ID</th>
+                <th>TYPE</th>
+                <th>LATITUDE</th>
+                <th>LONGITUDE</th>
+                <th>SPEED</th>
+                <th>HEADING</th>
+                <th>ACCURACY</th>
+                <th>RECORDED AT</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="historyTableBody"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+      <!-- Historical Route -->
+      <section class="panel route-panel">
+
+        <div class="panel-heading route-heading">
+
+          <div>
+            <h2>Historical Route</h2>
+
+            <p>
+              Recorded vehicle positions connected in chronological order.
+            </p>
+          </div>
+
+          <div
+            id="routeStatus"
+            class="route-status"
+          >
+            No history loaded
+          </div>
+
+        </div>
+
+
+        <div
+          id="historyMap"
+          class="history-map"
+        ></div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- Leaflet -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
+
+  <!-- History Application -->
+  <script
+    src="../js/history.js"
+  ></script>
+
+</body>
+</html>

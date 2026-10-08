@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="SafePath Vehicle Monitor"
+    >
+
+    <title>SafePath - Monitor</title>
+
+
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        crossorigin=""
+    >
+
+
+    <!-- Common SafePath CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+
+    <!-- Monitor CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/monitor.css"
+    >
+
+
+    <!-- Algorithm CSS -->
+    <link
+        rel="stylesheet"
+        href="../algorithm/radiusalgorithms.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../algorithm/emergencyalgorithm.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../algorithm/speedalgorithm.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- ============================================================
+         NAVIGATION OVERLAY
+    ============================================================= -->
+
+    <div
+        id="navigationOverlay"
+        class="monitor-navigation-overlay"
+    ></div>
+
+
+    <!-- ============================================================
+         NAVIGATION DRAWER
+    ============================================================= -->
+
+    <aside
+        id="navigationDrawer"
+        class="monitor-navigation-drawer"
+    >
+
+        <div class="monitor-drawer-header">
+
+            <div class="monitor-drawer-title">
+                SafePath
+            </div>
+
+            <button
+                id="drawerClose"
+                class="monitor-drawer-close"
+                type="button"
+                aria-label="Close navigation"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <nav class="monitor-drawer-navigation">
+
+            <a href="./Overview.html">
+                Overview
+            </a>
+
+            <a href="./vehicles.html">
+                Vehicles
+            </a>
+
+            <a href="./livemap.html">
+                Live Map
+            </a>
+
+            <a href="./alerts.html">
+                Alerts
+            </a>
+
+            <a href="./events.html">
+                Events
+            </a>
+
+            <a href="./history.html">
+                History
+            </a>
+
+            <a href="./fine.html">
+                Traffic Fine
+            </a>
+
+            <a href="./toll.html">
+                Toll Tax
+            </a>
+
+            <a href="./insurance.html">
+                Insurance and Pollution
+            </a>
+
+            <a href="./stolen.html">
+                Search Stolen Vehicle
+            </a>
+
+            <a
+                href="./monitor.html"
+                class="active"
+            >
+                Monitor
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- ============================================================
+         HEADER
+    ============================================================= -->
+
+    <header class="monitor-header">
+
+        <div class="monitor-header-left">
+
+            <button
+                id="menuButton"
+                class="monitor-menu-button"
+                type="button"
+                aria-label="Open navigation"
+                aria-expanded="false"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+
+            <div class="monitor-brand">
+
+                <img
+                    src="../asset/logo.png"
+                    alt="SafePath"
+                    class="monitor-logo"
+                >
+
+                <div class="monitor-brand-text">
+
+                    <div class="monitor-brand-title">
+                        SafePath
+                    </div>
+
+                    <div class="monitor-brand-subtitle">
+                        Monitor
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="monitor-header-right">
+
+            <span
+                id="connectionIndicator"
+                class="monitor-connection-dot disconnected"
+            ></span>
+
+            <span
+                id="connectionText"
+                class="monitor-connection-text"
+            >
+                Disconnected
+            </span>
+
+            <button
+                id="refreshButton"
+                class="monitor-refresh-button"
+                type="button"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ============================================================
+         MAP
+    ============================================================= -->
+
+    <main class="monitor-main">
+
+        <div
+            id="monitorMap"
+            class="monitor-map"
+        ></div>
+
+    </main>
+
+
+    <!-- ============================================================
+         SOCKET.IO
+    ============================================================= -->
+
+    <script src="../js/socket.io.min.js"></script>
+
+
+    <!-- ============================================================
+         LEAFLET
+    ============================================================= -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        crossorigin=""
+    ></script>
+
+
+    <!-- ============================================================
+         SHARED WEBSOCKET
+    ============================================================= -->
+
+    <script src="../js/websocket.js"></script>
+
+
+    <!-- ============================================================
+         SAFEPath ALGORITHMS
+    ============================================================= -->
+
+    <script src="../algorithm/radiusalgorithms.js"></script>
+
+    <script src="../algorithm/emergencyalgorithm.js"></script>
+
+    <script src="../algorithm/speedalgorithm.js"></script>
+
+
+    <!-- ============================================================
+         MONITOR
+    ============================================================= -->
+
+    <script src="../js/monitor.js"></script>
+
+
+</body>
+
+</html>

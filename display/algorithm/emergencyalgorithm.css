@@ -1,0 +1,310 @@
+/*
+ * SafePath
+ * Emergency Algorithm
+ *
+ * File:
+ * D:\Sec\safe_path_nodejs\display\algorithm\emergencyalgorithm.css
+ *
+ * Purpose:
+ * Styling for the Emergency popup.
+ */
+
+/* ================================================================
+   Emergency Popup
+   ================================================================ */
+
+.safepath-emergency-popup {
+    position: fixed;
+
+    top: 50%;
+    left: 50%;
+
+    width: min(
+        92vw,
+        460px
+    );
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(0.94);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    z-index: 10000;
+
+    pointer-events: none;
+
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease,
+        visibility 180ms ease;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+/* ================================================================
+   Visible State
+   ================================================================ */
+
+.safepath-emergency-popup--visible {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(1);
+
+    pointer-events: auto;
+}
+
+/* ================================================================
+   Popup Card
+   ================================================================ */
+
+.safepath-emergency-popup__card {
+    position: relative;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 16px;
+
+    padding: 22px 24px;
+
+    background: #ffffff;
+
+    border: 3px solid #d00000;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 12px 40px
+        rgba(0, 0, 0, 0.30);
+}
+
+/* ================================================================
+   Emergency Icon
+   ================================================================ */
+
+.safepath-emergency-popup__icon {
+    flex: 0 0 auto;
+
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #d00000;
+
+    color: #ffffff;
+
+    font-size: 28px;
+
+    line-height: 1;
+}
+
+/* ================================================================
+   Content
+   ================================================================ */
+
+.safepath-emergency-popup__content {
+    flex: 1;
+}
+
+/* ================================================================
+   Title
+   ================================================================ */
+
+.safepath-emergency-popup__title {
+    margin: 0 0 8px 0;
+
+    color: #b00000;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.3px;
+
+    line-height: 1.2;
+}
+
+/* ================================================================
+   Main Message
+   ================================================================ */
+
+.safepath-emergency-popup__message {
+    margin: 0;
+
+    color: #111111;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    line-height: 1.4;
+}
+
+/* ================================================================
+   Left Arrow
+   ================================================================ */
+
+.safepath-emergency-popup__left-arrow {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    margin-top: 10px;
+
+    color: #b00000;
+
+    font-size: 58px;
+
+    font-weight: 900;
+
+    line-height: 0.9;
+
+    animation:
+        safepath-emergency-left-arrow 900ms
+        ease-in-out infinite;
+}
+
+/* ================================================================
+   Instruction
+   ================================================================ */
+
+.safepath-emergency-popup__instruction {
+    margin-top: 8px;
+
+    color: #555555;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    line-height: 1.4;
+
+    text-align: center;
+}
+
+/* ================================================================
+   Arrow Animation
+   ================================================================ */
+
+@keyframes safepath-emergency-left-arrow {
+
+    0% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(-12px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* ================================================================
+   Optional Screen Overlay
+   ================================================================ */
+
+.safepath-emergency-popup--visible::before {
+    content: '';
+
+    position: fixed;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    z-index: -1;
+
+    background:
+        rgba(
+            120,
+            0,
+            0,
+            0.12
+        );
+
+    pointer-events: none;
+}
+
+/* ================================================================
+   Mobile
+   ================================================================ */
+
+@media (max-width: 600px) {
+
+    .safepath-emergency-popup {
+        width: calc(100vw - 24px);
+    }
+
+    .safepath-emergency-popup__card {
+        gap: 12px;
+
+        padding: 18px;
+    }
+
+    .safepath-emergency-popup__icon {
+        width: 44px;
+        height: 44px;
+
+        font-size: 23px;
+    }
+
+    .safepath-emergency-popup__title {
+        font-size: 18px;
+    }
+
+    .safepath-emergency-popup__message {
+        font-size: 16px;
+    }
+
+    .safepath-emergency-popup__left-arrow {
+        font-size: 48px;
+    }
+
+    .safepath-emergency-popup__instruction {
+        font-size: 12px;
+    }
+}
+
+/* ================================================================
+   Reduced Motion
+   ================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .safepath-emergency-popup {
+        transition: none;
+    }
+
+    .safepath-emergency-popup__left-arrow {
+        animation: none;
+    }
+}

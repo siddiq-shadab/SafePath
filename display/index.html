@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SafePath Live Vehicle Display</title>
+
+    <!-- =========================================================
+         LEAFLET CSS
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <!-- =========================================================
+         SAFE PATH CSS
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="./css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- =========================================================
+         APPLICATION
+    ========================================================== -->
+
+    <div id="app">
+
+
+        <!-- =====================================================
+             TOP HEADER
+        ====================================================== -->
+
+        <header class="top-header">
+
+            <div class="brand-section">
+
+                <div class="logo-wrapper">
+
+                    <img
+                        src="./asset/logo.png"
+                        alt="SafePath Logo"
+                        class="safe-path-logo"
+                    >
+
+                </div>
+
+
+                <div class="brand-text">
+
+                    <h1>SafePath</h1>
+
+                    <span>
+                        Road Accident Prevention System
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="system-status">
+
+                <div
+                    id="connectionIndicator"
+                    class="status-indicator offline"
+                >
+
+                    <span class="status-dot"></span>
+
+                    <span id="connectionText">
+                        Disconnected
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             MAIN CONTENT
+        ====================================================== -->
+
+        <main class="main-container">
+
+
+            <!-- =================================================
+                 LEFT CONTROL PANEL
+            ================================================== -->
+
+            <aside class="control-panel">
+
+
+                <div class="panel-header">
+
+                    <h2>
+                        Vehicle Monitor
+                    </h2>
+
+                    <span class="panel-status">
+                        LIVE
+                    </span>
+
+                </div>
+
+
+                <!-- =============================================
+                     VEHICLE SELECTION
+                ============================================== -->
+
+                <section class="panel-section">
+
+                    <label
+                        for="vehicleIdInput"
+                        class="field-label"
+                    >
+                        Vehicle ID
+                    </label>
+
+
+                    <div class="vehicle-input-row">
+
+                        <input
+                            id="vehicleIdInput"
+                            type="text"
+                            value=""
+                            placeholder="Waiting for vehicle..."
+                            autocomplete="off"
+                        >
+
+
+                        <button
+                            id="subscribeButton"
+                            type="button"
+                            class="primary-button"
+                        >
+                            Connect
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     VEHICLE TYPE
+                ============================================== -->
+
+                <section class="vehicle-card">
+
+                    <div class="vehicle-card-title">
+
+                        <span>
+                            Vehicle
+                        </span>
+
+
+                        <span
+                            id="vehicleOnlineBadge"
+                            class="online-badge offline"
+                        >
+                            OFFLINE
+                        </span>
+
+                    </div>
+
+
+                    <div class="vehicle-id-display">
+
+                        <span id="vehicleIdDisplay">
+                            --
+                        </span>
+
+                    </div>
+
+
+                    <div class="vehicle-type-display">
+
+                        <span class="label">
+                            Type
+                        </span>
+
+
+                        <span
+                            id="vehicleTypeDisplay"
+                            class="value"
+                        >
+                            --
+                        </span>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     LIVE TELEMETRY
+                ============================================== -->
+
+                <section class="telemetry-section">
+
+                    <div class="section-title">
+                        Live Telemetry
+                    </div>
+
+
+                    <div class="telemetry-grid">
+
+
+                        <!-- SPEED -->
+
+                        <div class="telemetry-card">
+
+                            <span class="telemetry-label">
+                                Speed
+                            </span>
+
+
+                            <div class="telemetry-value-row">
+
+                                <span
+                                    id="speedValue"
+                                    class="telemetry-value"
+                                >
+                                    0
+                                </span>
+
+
+                                <span class="telemetry-unit">
+                                    km/h
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- HEADING -->
+
+                        <div class="telemetry-card">
+
+                            <span class="telemetry-label">
+                                Heading
+                            </span>
+
+
+                            <div class="telemetry-value-row">
+
+                                <span
+                                    id="headingValue"
+                                    class="telemetry-value"
+                                >
+                                    0
+                                </span>
+
+
+                                <span class="telemetry-unit">
+                                    °
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ACCURACY -->
+
+                        <div class="telemetry-card">
+
+                            <span class="telemetry-label">
+                                Accuracy
+                            </span>
+
+
+                            <div class="telemetry-value-row">
+
+                                <span
+                                    id="accuracyValue"
+                                    class="telemetry-value"
+                                >
+                                    --
+                                </span>
+
+
+                                <span class="telemetry-unit">
+                                    m
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- UPDATE -->
+
+                        <div class="telemetry-card">
+
+                            <span class="telemetry-label">
+                                Update
+                            </span>
+
+
+                            <div class="telemetry-value-row">
+
+                                <span
+                                    id="updateValue"
+                                    class="telemetry-value small"
+                                >
+                                    --
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     POSITION
+                ============================================== -->
+
+                <section class="position-section">
+
+                    <div class="section-title">
+                        Current Position
+                    </div>
+
+
+                    <!-- LATITUDE -->
+
+                    <div class="coordinate-row">
+
+                        <span class="coordinate-label">
+                            Latitude
+                        </span>
+
+
+                        <span
+                            id="latitudeValue"
+                            class="coordinate-value"
+                        >
+                            --
+                        </span>
+
+                    </div>
+
+
+                    <!-- LONGITUDE -->
+
+                    <div class="coordinate-row">
+
+                        <span class="coordinate-label">
+                            Longitude
+                        </span>
+
+
+                        <span
+                            id="longitudeValue"
+                            class="coordinate-value"
+                        >
+                            --
+                        </span>
+
+                    </div>
+
+
+                    <!-- LAST ONLINE -->
+
+                    <div class="coordinate-row">
+
+                        <span class="coordinate-label">
+                            Last Online
+                        </span>
+
+
+                        <span
+                            id="lastOnlineValue"
+                            class="coordinate-value"
+                        >
+                            --
+                        </span>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     SOCKET STATUS
+                ============================================== -->
+
+                <section class="socket-section">
+
+                    <div class="section-title">
+                        Socket.IO
+                    </div>
+
+
+                    <!-- NAMESPACE -->
+
+                    <div class="socket-status-row">
+
+                        <span>
+                            Namespace
+                        </span>
+
+                        <strong>
+                            /vehicles
+                        </strong>
+
+                    </div>
+
+
+                    <!-- ROOM -->
+
+                    <div class="socket-status-row">
+
+                        <span>
+                            Room
+                        </span>
+
+                        <strong id="roomValue">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <!-- SOCKET ID -->
+
+                    <div class="socket-status-row">
+
+                        <span>
+                            Socket ID
+                        </span>
+
+                        <strong
+                            id="socketIdValue"
+                            class="socket-id"
+                        >
+                            --
+                        </strong>
+
+                    </div>
+
+                </section>
+
+            </aside>
+
+
+            <!-- =================================================
+                 MAP AREA
+            ================================================== -->
+
+            <section class="map-section">
+
+                <div
+                    id="map"
+                    class="map-container"
+                ></div>
+
+
+                <!-- =============================================
+                     MAP OVERLAY
+                ============================================== -->
+
+                <div class="map-overlay top-left">
+
+                    <div class="map-title">
+                        SafePath Live Map
+                    </div>
+
+                    <div class="map-subtitle">
+                        Real-time vehicle telemetry
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     MAP LEGEND
+                ============================================== -->
+
+                <div class="map-overlay bottom-left">
+
+                    <div class="map-legend">
+
+                        <div class="legend-item">
+
+                            <span class="legend-dot vehicle"></span>
+
+                            <span>
+                                Monitored Vehicle
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================================
+         SOCKET.IO CLIENT
+
+         Loaded locally so the application does not depend on
+         the external Socket.IO CDN.
+    ========================================================== -->
+
+    <script src="./js/socket.io.min.js"></script>
+
+
+    <!-- =========================================================
+         LEAFLET JS
+    ========================================================== -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""
+    ></script>
+
+
+    <!-- =========================================================
+         SAFE PATH JAVASCRIPT
+    ========================================================== -->
+
+   <script src="./js/vehicle.js?v=20261005-1548"></script>
+
+<script src="./js/websocket.js?v=20261005-1548"></script>
+
+<script src="./js/app.js?v=20261005-1548"></script>
+
+
+</body>
+
+</html>
